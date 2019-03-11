@@ -1,0 +1,82 @@
+	
+.site-branding {
+  text-align: center;
+	padding-bottom:30px;
+	
+}
+#masthead {
+    background-image: url("http://gldw.org/wp-content/uploads/2019/02/watershed_ghosted-1-e1550352037310.png");
+	background-size:100%;
+	background-position:center;
+}
+.site-title {
+  
+}
+
+.site-description {
+  margin: 0;
+}
+
+.site-description {
+	font-size:14px;
+	font-family:sans-serif;
+	
+}
+/**
+ * Page Header
+ */
+
+.nav-menu a {
+  color:white;
+}
+
+.nav-menu{
+	font-family:sans-serif;
+	font-size:15px;
+}
+ .menu{
+	padding: 25 0 0 0;
+	text-align: left;
+}
+
+.page-header {
+  position: relative;
+  text-align: left;
+	padding-left: 20px;
+
+  padding-bottom: 10px;
+	padding-top:15px;
+  -webkit-background-size: 100%;
+  background-size: 100%;
+  background-position: center center;
+}
+
+.site-title a {
+	font-family:  sans-serif;
+  font-size: 3.0rem;
+  text-decoration: none;
+	font-weight:550;
+  line-height: normal;
+}
+/**
+ * Page Title
+ */
+.page-title {
+	color: #010a75;
+  text-transform: none;
+  text-decoration: none;
+  text-align: left;
+	font-weight:1200;
+  position: relative;
+  font-size: 1.2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+input[type="submit"] {
+  -webkit-appearance: button;
+  line-height: normal;
+	padding: 1em 1em;
+  border-color: #f43a40;
+  background: #228822;
+  color: white;
+}
