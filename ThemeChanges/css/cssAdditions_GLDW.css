@@ -9,18 +9,11 @@
 	background-size:100%;
 	background-position:center;
 }
-.site-title {
-  
-}
 
 .site-description {
-  margin: 0;
-}
-
-.site-description {
-	font-size:14px;
+	margin: 0;
+	font-size: 1.1rem;
 	font-family:sans-serif;
-	
 }
 /**
  * Page Header
