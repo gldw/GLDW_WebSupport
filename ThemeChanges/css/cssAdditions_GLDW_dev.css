@@ -85,7 +85,8 @@ h4 {
 	color: #010a75;
 }
 h6 {
-	color: yellow;
+	font-size: 1rem;
+	color: #010a75;
 }
 	.doc_table  table {
 		width: 100%;	

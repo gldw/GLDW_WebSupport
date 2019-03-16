@@ -19,7 +19,7 @@ get_header(); ?>
         <?php if ( get_header_image() || has_post_thumbnail( get_the_ID() ) ) : ?>
             <span class="bg-overlay"></span>
         <?php endif; ?>
-        <?php awesomepress_page_header_top(); ?>		<?php printf('<h6> <center> Site Under Construction: Feel free to check it out but visit again after May 1, 2019 </center> </h6>'); ?>		<?php the_title('<h1 class="page-title">', '</h1>'); ?>  
+        <?php awesomepress_page_header_top(); ?>		<?php printf('<h6> <center> SITE UNDER CONSTRUCTION: Check it out but please visit again after May 1, 2019 </center> </h6>'); ?>		<?php the_title('<h1 class="page-title">', '</h1>'); ?>  
     <?php awesomepress_page_header_bottom(); ?>
     </header><!-- .page-header -->
     <?php awesomepress_page_header_after(); ?>
