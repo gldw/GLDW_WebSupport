@@ -1,4 +1,6 @@
 	
+	
+	
 .site-branding {
   text-align: center;
 	padding-bottom:30px;
@@ -9,18 +11,11 @@
 	background-size:100%;
 	background-position:center;
 }
-.site-title {
-  
-}
 
 .site-description {
-  margin: 0;
-}
-
-.site-description {
-	font-size:14px;
+	margin: 0;
+	font-size: 1.1rem;
 	font-family:sans-serif;
-	
 }
 /**
  * Page Header
@@ -62,7 +57,7 @@
  * Page Title
  */
 .page-title {
-	color: #010a75;
+	color: white;
   text-transform: none;
   text-decoration: none;
   text-align: left;
@@ -79,4 +74,16 @@ input[type="submit"] {
   border-color: #f43a40;
   background: #228822;
   color: white;
+}
+h1 {
+		color: #010a75;
+}
+h2 {
+		color: #010a75;
+}
+h4 {
+	color: #010a75;
+}
+h6 {
+	color: yellow;
 }

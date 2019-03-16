@@ -1,5 +1,6 @@
 	
 	
+	
 .site-branding {
   text-align: center;
 	padding-bottom:30px;
@@ -82,6 +83,9 @@ h2 {
 }
 h4 {
 	color: #010a75;
+}
+h6 {
+	color: yellow;
 }
 	.doc_table  table {
 		width: 100%;	
