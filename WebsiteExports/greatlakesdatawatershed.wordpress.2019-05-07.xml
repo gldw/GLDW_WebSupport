@@ -16,7 +16,7 @@
 <!-- 7. WordPress will then import each of the posts, pages, comments, categories, etc. -->
 <!--    contained in this file into your site. -->
 
-<!-- generator="WordPress/5.0.4" created="2019-05-07 11:38" -->
+<!-- generator="WordPress/5.0.4" created="2019-05-07 19:06" -->
 <rss version="2.0"
 	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -29,7 +29,7 @@
 	<title>Great Lakes Data Watershed</title>
 	<link>https://gldw.org</link>
 	<description>Our Great Lakes water quality data managed, processed and visualized using the VDAB Event Data Watershed.</description>
-	<pubDate>Tue, 07 May 2019 11:38:41 +0000</pubDate>
+	<pubDate>Tue, 07 May 2019 19:06:57 +0000</pubDate>
 	<language>en-US</language>
 	<wp:wxr_version>1.2</wp:wxr_version>
 	<wp:base_site_url>https://gldw.org</wp:base_site_url>
@@ -1162,38 +1162,41 @@ Real-time data moving into the watershed can be tested for critical condition wi
 <textarea name="DataDescription" id="datadescription" rows="10" cols="20"></textarea>
 <label for="geolocationtype">Geo Location Type*:</label>
 <select name="GeoLocationType" id="geolocationtype">
-<option value="Stationary">Stationary</option>
+<option selected="selected" value="Stationary">Stationary</option>
 <option value="Mobile">Mobile</option>
 <option value="MobileFenced">Mobile Fenced</option>
 </select>
-<label for="publishingmethod">Publishing Method:</label>
+<label for="publishingmethod">Publishing Method*:</label>
 <select name="PublishingMethod" id="publishingmethod">
 <option value="MQTT">MQTT</option>
 <option value="HTTP">HTTP</option>
-<option value="VDAB">VDAB</option>
+<option selected="selected" value="VDAB">VDAB</option>
 <option value="Manual">Manual</option>
 </select>
 <label for="dataquality">Data Quality*:</label>
 <select name="DataQuality" id="dataquality">
 <option value="High">High</option>
-<option value="Moderate">Moderate</option>
+<option selected="selected" value="Moderate">Moderate</option>
 <option value="Low">Low</option>
 <option value="Test">Test</option>
 <option value="Simulated">Simulated</option>
 </select>
-<label for="publishto">Publish To:</label>
+<label for="publishto">Publish To*:</label>
 <select name="PublishTo" id="publishto">
-<option value="LakeErie">Lake Erie</option>
+<option selected="Selected" value="LakeErie">Lake Erie</option>
 <option value="LakeOntario">Lake Ontario</option>
 <option value="GreatLakes">Great Lakes</option>
 <option value="RockyRiver">Rocky River</option>
 <option value="Other">Other</option>
 </select>
+<label for="vdabservers">Include VDAB Server*:</label>
+<select name="RequestedVDABServer" id="vdabservers">'.
+<option selected="selected" value="None">No</option>'.
+<option value="Source">Yes</option>
+</select>
 <label for="specialinstructions">Special Instructions:</label>
 <textarea name="SpecialInstructions" id="specialinstructions" rows="10" cols="20"></textarea>
-
 <input type="submit" value="Submit">
-
 </form>* Required FIelds
 <pre><script type="text/javascript">
      var href= window.location.href;
@@ -1624,10 +1627,8 @@ As a registered user you will be able to declare and register data streams. In a
 
 <label for="country">Country*:</label>
 
-<select name="Country" id="country" onchange="printStateMenu(this.value);">'.
-     '
-<option></option>'.
-<option value="US">United States of America</option>'.
+<select name="Country" id="country" onchange="printStateMenu(this.value);" onload="printStateMenu('US');">'.
+<option selected="selected" value="US">United States of America</option>'.
 <option value="CA">Canada</option>
 </select>
 
@@ -1637,12 +1638,10 @@ As a registered user you will be able to declare and register data streams. In a
 </select></p>
 <label for="postalcode">Postal Code*:</label><input name="PostalCode" id="postalcode" type="text" size="9">
 
-<label for="vdabservers">Requested VDAB Servers*:</label>
-<select name="RequestedVDABServers" id="vdabservers" onchange="printStateMenu(this.value);">'.
-<option>none</option>'.
-<option value="Analysis">Analysis VDAB Server</option>'.
-<option value="Source">Source VDAB Server</option>
-<option value="AnalysisSource">Analysis and Source VDAB Servers</option>'.
+<label for="vdabservers">Include VDAB Server*:</label>
+<select name="RequestedVDABServer" id="vdabservers">'.
+<option selected="selected" value="Analysis">Yes</option>'.
+<option value="None">No</option>
 </select>
 <input type="submit" value="Submit">
 </form>* Required Fields
@@ -2208,16 +2207,22 @@ function printStateMenu(country) {
 While most features of GLDW are available to registered GLDW users, data streams may be alternately associated with an organization.
 <h3>
 <span id="error_message" style="color: rgb(255, 0, 0);"> </span></h3>
-<form action="http://cloud2.gldw.org:40502/vdab/org_registration" method="get"><label for="organization">Organization Name*:</label>
-<input name="OrganizationName" id="organization" type="text" size="20">
-<label for="primarycontact">Primary Contact:</label>
+<form action="http://lcrc.com:31161/vdab/org_registration" method="get"><label for="organization">Organization*:</label>
+<input name="Organization" id="organization" type="text" size="20">
+<label for="primarycontact">Primary Contact*:</label>
 <input name="PrimaryContact" id="primarycontact" type="text" size="15">
 <label for="secondarycontact">Secondary Contact:</label>
 <input name="SecondaryContact" id="secondarycontact" type="text" size="15">
-<label for="industry">Industry:</label>
+<label for="industry">Industry*:</label>
 <input name="Industry" id="industry" type="text" size="25">
-<label for="organizationtype">Organization Type:</label>
-<input name="OrganizationType" id="organizationtype" type="text" size="25">
+<label for="organizationtype">Organization Type*:</label>
+<select name="OrganizationType" id="organizationtype">
+<option value="ACADEMIC">Academic</option>
+<option value="GOVERNMENTAL">Governmental</option>
+<option value="NONPROFIT">Non Profit</option>
+<option selected="selected" value="PRIVATE">Private</option>
+</select>
+
 <label for="website">Website:</label>
 <input name="Website" id="website" type="text" size="25">
 <label for="streetaddress">Street Address:</label>
@@ -3015,7 +3020,7 @@ Each registered user will be provide their own processing space and can perform 
 <hr>
 
 You will be receiving a user login information in an email sent to the email provided with your registration.
-Expect this sometime after the Site launch data in June 2019.</h4>]]></content:encoded>
+Expect this sometime after the official GLDW launch in June 2019.</h4>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>631</wp:post_id>
 		<wp:post_date><![CDATA[2019-05-06 13:07:19]]></wp:post_date>
@@ -3043,7 +3048,7 @@ Expect this sometime after the Site launch data in June 2019.</h4>]]></content:e
 <hr>
 
 You will be receiving your stream id and other information in a email sent to the email address associated with the user.
-Expect this sometime after the Site launch data in June 2019.</h4>]]></content:encoded>
+Expect this sometime after the official GLDW launch in June 2019.</h4>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>644</wp:post_id>
 		<wp:post_date><![CDATA[2019-05-06 14:00:15]]></wp:post_date>
@@ -3051,6 +3056,33 @@ Expect this sometime after the Site launch data in June 2019.</h4>]]></content:e
 		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
 		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
 		<wp:post_name><![CDATA[data-stream-registration-completed]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>0</wp:menu_order>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:post_password><![CDATA[]]></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+	</item>
+	<item>
+		<title>Organization Registration Completed</title>
+		<link>https://gldw.org/organization-registration-completed/</link>
+		<pubDate>Tue, 07 May 2019 14:56:34 +0000</pubDate>
+		<dc:creator><![CDATA[markjapp]]></dc:creator>
+		<guid isPermaLink="false">https://gldw.org/?page_id=666</guid>
+		<description></description>
+		<content:encoded><![CDATA[<h2> Your organization has been registered.</h2>
+<h4>
+
+<hr>
+
+You will be receiving a confirmation email sometime after the official GLDW launch in June 2019.</h4>]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>666</wp:post_id>
+		<wp:post_date><![CDATA[2019-05-07 08:56:34]]></wp:post_date>
+		<wp:post_date_gmt><![CDATA[2019-05-07 14:56:34]]></wp:post_date_gmt>
+		<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+		<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+		<wp:post_name><![CDATA[organization-registration-completed]]></wp:post_name>
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_parent>0</wp:post_parent>
 		<wp:menu_order>0</wp:menu_order>
