@@ -11,13 +11,13 @@ public class GLDWRegistrationSupport extends JavaFunctionSet_A {
 	private final static String PATH_ADDRESS1= ".AddressLine1";
 	private final static String PATH_ADDRESS2= ".AddressLine2";
 	private final static String PATH_CITY= ".City";
+	private final static String PATH_STATE= ".State";
+	private final static String PATH_COUNTRY= ".Country";
 	private final static String PATH_POSTALCODE= ".PostalCode";
-	private final static String PATH_SERVERS= ".RequestedVDABServer";
 	private final static String PATH_EMAIL= ".EMail";
 	private final static String PATH_PHONE = ".Phone";
 	private final static String PATH_ORGANIZATION = ".Organization";
-	private final static String PATH_OWNER= ".Owner";
-
+	private final static String PATH_SERVERS= ".RequestedVDABServer";
 	//
 	// VALIDATE  USER
 	//----------------------------------------------------
@@ -43,7 +43,7 @@ public class GLDWRegistrationSupport extends JavaFunctionSet_A {
 		
 		// check Phone No
 		String phone = inData.getDataAsString(basePath + PATH_PHONE);
-		if (phone != null && phone.length() > 0 && (!phone.matches("\\d+") || phone.length() != 10)) {
+		if (!phone.matches("\\d+") || phone.length() != 10) {
 			pushError("phone number must be 10 digit number");
 			return null;
 		}	
@@ -81,6 +81,20 @@ public class GLDWRegistrationSupport extends JavaFunctionSet_A {
 			return null ;
 		}
 		
+		String state = inData.getDataAsString(basePath+PATH_STATE);
+		err = checkRequiredAttribute("State", state, 2 );
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+		
+		String country = inData.getDataAsString(basePath+PATH_COUNTRY);
+		err = checkRequiredAttribute("Country", country, 2 );
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+		
 		String postalcode = inData.getDataAsString(basePath+PATH_POSTALCODE);
 		err = checkRequiredAttribute("PostalCode", postalcode, 5 );
 		if (err != null){
@@ -88,6 +102,13 @@ public class GLDWRegistrationSupport extends JavaFunctionSet_A {
 			return null ;
 		}
 	
+		String server = inData.getDataAsString(basePath+PATH_SERVERS);
+		err = checkRequiredAttribute("RequestedVDABServer", server, 2 );
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+		
 		return inData;
 	}
 
@@ -95,6 +116,11 @@ public class GLDWRegistrationSupport extends JavaFunctionSet_A {
 //----------------------------------------------------
 private final static String PATH_DATASOURCE= ".DataSource";
 private final static String PATH_DATALABEL= ".DataLabel";	
+private final static String PATH_DATAQUALITY= ".DataQuality";	
+private final static String PATH_DATADESCRIPTION= ".DataDescription";	
+private final static String PATH_GEOLOCATIONTYPE= ".GeoLocationType";
+private final static String PATH_PUBLISHTO= ".PublishTo";
+
 public  VDABData func_validateStreamRegistration(VDABData inData, String basePath){
 
 	String err = null;
@@ -115,13 +141,48 @@ public  VDABData func_validateStreamRegistration(VDABData inData, String basePat
 	}
 	
 	// Check DataLabel
-	String datalabel = inData.getDataAsString(basePath+PATH_DATASOURCE);
+	String datalabel = inData.getDataAsString(basePath+PATH_DATALABEL);
 	err = checkRequiredAttribute("DataLabel", datalabel, 8);
 	if (err != null){
 		pushError(err);
 		return null ;
 	}
 
+	String datadescription = inData.getDataAsString(basePath+PATH_DATADESCRIPTION);
+	err = checkRequiredAttribute("DataDescription", datadescription, 8);
+	if (err != null){
+		pushError(err);
+		return null;
+	}
+	
+	String dataquality = inData.getDataAsString(basePath+PATH_DATAQUALITY);
+	err = checkRequiredAttribute("DataQuality", dataquality, 8);
+	if (err != null){
+		pushError(err);
+		return null;
+	}
+	
+	String publishto = inData.getDataAsString(basePath+PATH_PUBLISHTO);
+	err = checkRequiredAttribute("PublishTo", publishto, 2);
+	if (err != null){
+		pushError(err);
+		return null;
+	}
+	
+	String geolocationtype = inData.getDataAsString(basePath+PATH_GEOLOCATIONTYPE);
+	err = checkRequiredAttribute("GeoLocationType", geolocationtype, 8);
+	if (err != null){
+		pushError(err);
+		return null;
+	}
+	
+	String server = inData.getDataAsString(basePath+PATH_SERVERS);
+	err = checkRequiredAttribute("RequestedVDABServer", server, 2 );
+	if (err != null){
+		pushError(err);
+		return null ;
+	}
+	
 	return inData;
 }
 
@@ -129,8 +190,10 @@ public  VDABData func_validateStreamRegistration(VDABData inData, String basePat
 	// VALIDATE ORGANIZATION
 	//----------------------------------------------------
 private final static String PATH_PRIMARYCONTACT = ".PrimaryContact";
-private final static String PATH_SECONDARYCONTACT = ".SecondaryContact";	
-private final static String PATH_ORGANIZATIONTYPE = ".OrganizationType";	
+private final static String PATH_INDUSTRY = ".Industry";	
+private final static String PATH_ORGANIZATIONTYPE = ".OrganizationType";
+
+
 	public  VDABData func_validateOrganizationRegistration(VDABData inData, String basePath){
 		
 		String err = null;
@@ -148,12 +211,57 @@ private final static String PATH_ORGANIZATIONTYPE = ".OrganizationType";
 			return null ;
 		}
 		
+		String industry = inData.getDataAsString(basePath+PATH_INDUSTRY);
+		err = checkRequiredAttribute("Industry", industry, 2);
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+		
 		String organizationType = inData.getDataAsString(basePath+PATH_ORGANIZATIONTYPE);
 		err = checkRequiredAttribute("OrganizationType", organizationType, 2);
 		if (err != null){
 			pushError(err);
 			return null ;
 		}			
+		
+		String address = inData.getDataAsString(basePath+PATH_ADDRESS1)+" "+inData.getDataAsString(basePath+PATH_ADDRESS2);
+		err = checkRequiredAttribute("Address", address, 8 );
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+		
+		String city = inData.getDataAsString(basePath+PATH_CITY);
+		err = checkRequiredAttribute("City", city, 2 );
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+		
+
+		String state = inData.getDataAsString(basePath+PATH_STATE);
+		err = checkRequiredAttribute("State", state, 2 );
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+		
+		
+		String country = inData.getDataAsString(basePath+PATH_COUNTRY);
+		err = checkRequiredAttribute("Country", country, 2 );
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+		
+		String postalcode = inData.getDataAsString(basePath+PATH_POSTALCODE);
+		err = checkRequiredAttribute("PostalCode", postalcode, 5 );
+		if (err != null){
+			pushError(err);
+			return null ;
+		}
+	
 		return inData;
 	}
 
