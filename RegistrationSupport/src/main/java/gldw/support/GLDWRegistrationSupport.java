@@ -149,14 +149,14 @@ public  VDABData func_validateStreamRegistration(VDABData inData, String basePat
 	}
 
 	String datadescription = inData.getDataAsString(basePath+PATH_DATADESCRIPTION);
-	err = checkRequiredAttribute("DataDescription", datadescription, 8);
+	err = checkRequiredAttribute("DataDescription", datadescription, 24);
 	if (err != null){
 		pushError(err);
 		return null;
 	}
 	
 	String dataquality = inData.getDataAsString(basePath+PATH_DATAQUALITY);
-	err = checkRequiredAttribute("DataQuality", dataquality, 8);
+	err = checkRequiredAttribute("DataQuality", dataquality, 2);
 	if (err != null){
 		pushError(err);
 		return null;
@@ -170,7 +170,7 @@ public  VDABData func_validateStreamRegistration(VDABData inData, String basePat
 	}
 	
 	String geolocationtype = inData.getDataAsString(basePath+PATH_GEOLOCATIONTYPE);
-	err = checkRequiredAttribute("GeoLocationType", geolocationtype, 8);
+	err = checkRequiredAttribute("GeoLocationType", geolocationtype, 2);
 	if (err != null){
 		pushError(err);
 		return null;
