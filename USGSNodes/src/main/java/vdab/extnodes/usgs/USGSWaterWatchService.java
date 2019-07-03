@@ -129,6 +129,12 @@ public class USGSWaterWatchService  extends HTTPService_A{
 
 	}
 	private HashMap<String,String> c_LastRecord_map = new HashMap<String, String>();
+	private String getDataPath(String siteno){
+		StringBuilder sb = new StringBuilder();
+		sb.append(c_RegionCode.toUpperCase());
+		sb.append(siteno);
+		return sb.toString();
+	}
 	private boolean hasChanged(String record){
 		String site = StringUtility.digitsOnly(record.substring(0,16));
 		String last = c_LastRecord_map.get(site);
@@ -145,13 +151,14 @@ public class USGSWaterWatchService  extends HTTPService_A{
 		sb.append(json);
 		sb.append("}");
 		String fixedJson = sb.toString();
-		fixedJson = fixedJson.replace("class", "hclass");
+		fixedJson = fixedJson.replace("class", "XXXclassXXX"); // Replace "class" with token, JSON java library doesn't like it
 		fixedJson = fixedJson.replace("null", "\"\"");
 
 		try{
 			AnalysisData ad = JsonUtility.convertJsonToAnalysisData("SiteUSGS", fixedJson);
 			String siteno = ad.getElementByLabel("site_no").getDataAsString();	
-			String timeStr = ad.getElementByLabel("flow_dt").getDataAsString();
+			String flowTimeStr = ad.getElementByLabel("flow_dt").getDataAsString();
+			String stageTimeStr = ad.getElementByLabel("stage_dt").getDataAsString();
 			String timeZone = ad.getElementByLabel("tz_cd").getDataAsString();
 			
 			Double latitude = ad.getElementByLabel("dec_lat_va").getDataAsDouble();
@@ -161,18 +168,32 @@ public class USGSWaterWatchService  extends HTTPService_A{
 			AnalysisCompoundData acd = new AnalysisCompoundData("USGSData");
 			AnalysisData[] ads = ad.getAllSimpleSubData();
 			for (AnalysisData adSub: ads){
+				if (adSub.getLabel().equals("XXXclassXXX")) // replace token "class"
+					adSub.setLabel("class");
 				if (c_cdb_SelectedFields.isSet(adSub.getLabel()))
 						acd.addAnalysisData(adSub);
+				
 			}
 			
 			// Get Date for event - set timzone if needed.
 			if (!c_WWLastTZ.equals(timeZone)){
 				c_WWDateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
 				c_WWLastTZ = timeZone;
-			}			
-			Date evDate = c_WWDateFormat.parse(timeStr);
+			}
+			
+			// Use the latest of the available times
+			long ts = 0L;
+			long flowTime = c_WWDateFormat.parse(flowTimeStr).getTime();
+			long stageTime = c_WWDateFormat.parse(stageTimeStr).getTime();
+			if (flowTime == stageTime){
+				ts = flowTime;
+			}
+			else {
+				ts = (flowTime > stageTime)? flowTime: stageTime;
+//				setWarning(">>>> THE times are not the same STAGE="+stageTimeStr+" FLOW="+flowTimeStr+" SITE="+siteno);
+			}
 
-			AnalysisEvent ev = new AnalysisEvent(evDate.getTime(),"USGS"+siteno,acd);
+			AnalysisEvent ev = new AnalysisEvent(ts,getDataPath(siteno),acd);
 			ev.setLocation(GeoUnits.DEGREES_NE_METERS, latitude, longitude, null);
 			return ev;
 		}
