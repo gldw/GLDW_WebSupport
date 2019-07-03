@@ -170,11 +170,14 @@ public class USGSWaterWatchService  extends HTTPService_A{
 			for (AnalysisData adSub: ads){
 				if (adSub.getLabel().equals("XXXclassXXX")) // replace token "class"
 					adSub.setLabel("class");
-				if (c_cdb_SelectedFields.isSet(adSub.getLabel()))
-						acd.addAnalysisData(adSub);
-				
+				if (c_cdb_SelectedFields.isSet(adSub.getLabel())){
+					if (adSub.getLabel().equals("station_nm")){ // remove commas in station name.
+						adSub.setData(adSub.getDataAsString().replace(","," "));
+					}
+					acd.addAnalysisData(adSub);
+				}
 			}
-			
+
 			// Get Date for event - set timzone if needed.
 			if (!c_WWLastTZ.equals(timeZone)){
 				c_WWDateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
