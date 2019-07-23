@@ -4,6 +4,8 @@ Plugin Name: Vdab Alert
 Description: Displays a list of currently active alerts from VDAB
 Author: Matthew App
 */
+
+
 class vdabalert_widget extends WP_Widget {
 function __construct() {
 parent::__construct('vdabalert_widget', __('VDAB Alert Widget', 'vdabalert_widget_domain'),  
@@ -11,14 +13,24 @@ parent::__construct('vdabalert_widget', __('VDAB Alert Widget', 'vdabalert_widge
 array( 'VDAB Alert display widget' => __( 'Widget to display of a list of currently active alerts', 'vdabalert_widget_domain' ), ) 
 );
 }
-public function displayAlert( $alert ){
+	
+
+	
+
+public function displayAlert( $alert, $Date, $AlertDetailURL ){
 //make the Info attribute of the Alert link to the Alert's ContainerURL
 
-    $containerURL = $alert["FlowURL"];
-echo "<a href='$containerURL' >";
+    //$containerURL = $alert["FlowURL"];
+
+	
+$tz = 'America/New_York';
+$timestamp = (int)$alert["EventTimestamp"];
+$date = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
+$date->setTimestamp($timestamp/1000);
+
+echo "<tr><td>".$date->format($Date)."</td><td>"."<a href='".$AlertDetailURL."?Category=".$alert["Category"]."&Severity=".$alert["Severity"]."&Info=".$alert["Info"]."&Summary=".$alert["Summary"]."&FlowURL=".$alert["FlowURL"]."&ContainerURL=".$alert["ContainerURL"]."&EventTime=".$alert["EventTime"]."&Container=".$alert["Container"]."&Latitude=".$alert["Latitude"]."&Longitude=".$alert["Longitude"]."&Detail=".$alert["Detail"]."'>";
 echo $alert["Info"];
-echo "</a>";
-echo "<hr>";
+echo "</a></td></tr>";
 }
 public function fixupJSON($result0){
 //trimming the json string of unnessecary white spaces and brackets
@@ -65,6 +77,8 @@ public function widget( $args, $instance ) {
 $title = apply_filters( 'widget_title', $instance['title'] );
 $NoRows = $instance["NoRows"];
 $AlertURL = $instance["AlertURL"];
+$AlertDetailURL = $instance["AlertDetailURL"];
+$Date = $instance["Date"];
 //will run any functions that have been hooked (using add_filter()) to the filter hook that we’re naming 'widget_title,' passing $instance['title'] to each of those functions.
 // before and after widget arguments are defined by themes
 echo $args['before_widget'];
@@ -95,11 +109,13 @@ $result2[strrpos($result2, ',')] = '';
 }
 
 $arr3 = json_decode($result2, true);
-
+	
+echo "<table>";	
 foreach($arr3 as $alert) { 
-$this->displayAlert($alert);
+$this->displayAlert($alert, $Date, $AlertDetailURL);
 } 
-
+echo "</table>";	
+	
 echo $args['after_widget'];
 }
      
@@ -120,12 +136,27 @@ $AlertURL = $instance[ 'AlertURL' ];
 else {
 $AlertURL = __( 'http://mirror1.gldw.org/vdab/get_Alerts', 'vdabalert_widget_domain' );
 }
+	
+
+if ( isset( $instance[ 'AlertDetailURL' ] ) ) {
+$AlertDetailURL = $instance[ 'AlertDetailURL' ];
+}
+else {
+$AlertDetailURL = __( 'http://gldw.org/alert-detail/', 'vdabalert_widget_domain' );
+}	
 
 if ( isset( $instance[ 'NoRows' ] ) ) {
 $NoRows = $instance[ 'NoRows' ];
 }
 else {
 $NoRows = __( '3', 'vdabalert_widget_domain' );
+}
+	
+if ( isset( $instance[ 'Date' ] ) ) {
+$Date = $instance[ 'Date' ];
+}
+else {
+$Date = __( 'g:i A', 'vdabalert_widget_domain' );
 }
 // Widget admin form
 // This html outputs the options of the form in the Widgets screen 
@@ -142,8 +173,14 @@ $NoRows = __( '3', 'vdabalert_widget_domain' );
 <label for="<?php echo $this->get_field_id( 'AlertURL' ); ?>"><?php _e( 'Alert URL:' ); ?></label> 
 <input class="widefat" id="<?php echo $this->get_field_id( 'AlertURL' ); ?>" name="<?php echo $this->get_field_name( 'AlertURL' ); ?>" type="text" value="<?php echo esc_attr( $AlertURL ); ?>" /> 
 
+<label for="<?php echo $this->get_field_id( 'AlertDetailURL' ); ?>"><?php _e( 'Alert Detail URL:' ); ?></label> 
+<input class="widefat" id="<?php echo $this->get_field_id( 'AlertDetailURL' ); ?>" name="<?php echo $this->get_field_name( 'AlertDetailURL' ); ?>" type="text" value="<?php echo esc_attr( $AlertDetailURL ); ?>" /> 	
+	
 <label for="<?php echo $this->get_field_id( 'NoRows' ); ?>"><?php _e( 'Number of Rows:' ); ?></label> 
 <input class="widefat" id="<?php echo $this->get_field_id( 'NoRows' ); ?>" name="<?php echo $this->get_field_name( 'NoRows' ); ?>" type="text" value="<?php echo esc_attr( $NoRows ); ?>" />
+
+<label for="<?php echo $this->get_field_id( 'Date' ); ?>"><?php _e( 'Date Formatting:' ); ?></label> 
+<input class="widefat" id="<?php echo $this->get_field_id( 'Date' ); ?>" name="<?php echo $this->get_field_name( 'Date' ); ?>" type="text" value="<?php echo esc_attr( $Date ); ?>" />	
 </p>
 
 <?php 
@@ -157,7 +194,9 @@ $instance = array();
 $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 $instance['NoRows'] = ( ! empty( $new_instance['NoRows'] ) ) ? strip_tags( $new_instance['NoRows'] ) : '';
 $instance['AlertURL'] = ( ! empty( $new_instance['AlertURL'] ) ) ? strip_tags( $new_instance['AlertURL'] ) : '';
-
+$instance['AlertDetailURL'] = ( ! empty( $new_instance['AlertDetailURL'] ) ) ? strip_tags( $new_instance['AlertDetailURL'] ) : '';
+$instance['Date'] = ( ! empty( $new_instance['Date'] ) ) ? strip_tags( $new_instance['Date'] ) : '';
+	
 return $instance;
 }
 }
@@ -168,3 +207,11 @@ function vdabalert_load_widget() {
 }
 // Adds this into the available widgets.
 add_action( 'widgets_init', 'vdabalert_load_widget' );
+
+function add_vdabalert_stylesheet() {
+	wp_register_style('vdab_alertwidget', '/wp-content/plugins/vdabalert_plugin/vdab_alertwidget.css');
+wp_enqueue_style('vdab_alertwidget');
+
+}
+
+add_action( 'wp_print_styles', 'add_vdabalert_stylesheet' );
