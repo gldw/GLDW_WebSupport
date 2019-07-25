@@ -1,0 +1,133 @@
+<h2><span id="alert_category"></span> Alert</h2>
+<div class="alert_summary">
+<span id="alert_summary" "=""> </span></div>
+
+<hr>
+
+<div class="alert_table">
+<table>
+<tbody>
+<tr>
+<td class="alert_header">
+Alert Time</td>
+<td class="alert_item">
+<span id="alert_date"></span></td>
+</tr>
+<tr>
+<td class="alert_header">
+Latitude</td>
+<td class="alert_item">
+<span id="alert_latitude"> </span></td>
+</tr>
+<tr>
+<td class="alert_header">
+Longitude</td>
+<td class="alert_item">
+<span id="alert_longitude"> </span></td>
+</tr>
+<tr>
+<td class="alert_header">
+Details</td>
+<td class="alert_item">
+<span id="alert_detail"> </span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<iframe id="flow_iframe" width="800" height="600" src="http://watershed.gldw.org/vdab"> </iframe>
+
+<span id="alert_href"> </span>
+<pre><script type="text/javascript">
+function formatDetails(details){
+  var retstr = "<table>";
+  detailRows = details.split("|");
+  for (i=0; i < detailRows.length; i++){
+     var parts = detailRows[i].split(":");
+     if (parts.length == 2){
+         if (parts[0].indexOf("Latitude") > 0)
+             continue;
+         if (parts[0].indexOf("Longitude") > 0)
+             continue;
+        if (parts[0].indexOf("EventTimestamp") > 0)
+             continue;
+        if (parts[0].indexOf("Label") > 0)
+             continue;
+         retstr += "<tr> <td>";
+         retstr += parts[0];
+         retstr += "</td><td>";
+         retstr += parts[1];
+         retstr += "</td> </tr>";
+      }
+   } 
+   retstr += "</table>";
+ return retstr;
+}
+     var href= window.location.href;
+  document.getElementById("alert_href").innerHTML =decodeURI(href);
+     var sSummary = href.indexOf("&Summary=");
+     var sFlowURL = href.indexOf("&FlowURL=");
+     var sCategory = href.indexOf("?Category=");
+     var sSeverity = href.indexOf("&Severity=");
+     var sDetails = href.indexOf("&Detail=");
+     var sEventTime = href.indexOf("&EventTime=");
+    var sContainer = href.indexOf("&Container=");
+     var sLatitude = href.indexOf("&Latitude=");
+    var sLongitude = href.indexOf("&Longitude=");
+    var sFlowURL = href.indexOf("&FlowURL=");
+    var sContainerURL = href.indexOf("&ContainerURL=");
+    var summary = null;
+        if (sSummary > 0){
+           summary = decodeURI(href.substring(sSummary+9,sFlowURL));
+        }
+        if (summary != null){
+           document.getElementById("alert_summary").innerHTML =summary;
+        }
+   
+      var datetime = null;
+        if (sEventTime > 0){
+           datetime = decodeURI(href.substring(sEventTime+11, sContainer));
+        }
+        if (datetime != null){
+           document.getElementById("alert_date").innerHTML =datetime;
+        }
+        var latitude = null;
+        if (sLatitude> 0 ){
+           latitude = decodeURI(href.substring(sLatitude+10, sLongitude));
+        }
+        if (latitude != null){
+           document.getElementById("alert_latitude").innerHTML =latitude;
+        }
+        var longitude = null;
+        if (sLongitude > 0 ){
+           longitude = decodeURI(href.substring(sLongitude+11, sDetails));
+        }
+        if (longitude != null){
+           document.getElementById("alert_longitude").innerHTML =longitude;
+        }
+
+    
+         var category = null;
+        if (sCategory > 0 ){
+          category  = decodeURI(href.substring(sCategory+10, sSeverity));
+       }
+          if (category != null){
+             document.getElementById("alert_category").innerHTML =category;
+          }
+       
+
+      var details = null;
+        if (sDetails > 0){
+           details = decodeURI(href.substring(sDetails+8));
+        }
+        if (details != null){
+           document.getElementById("alert_detail").innerHTML=formatDetails(details);
+        }
+     var flowURL = null;
+        if (sFlowURL > 0 ){
+           flowURL = decodeURI(href.substring(sFlowURL+9, sContainerURL));
+        }
+        if (flowURL != null){
+           document.getElementById("flow_iframe").src =flowURL;
+        }
+
+</script></pre>
