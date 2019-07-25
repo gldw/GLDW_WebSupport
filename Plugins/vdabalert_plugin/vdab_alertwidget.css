@@ -1,5 +1,12 @@
-.widget_vdabalert_widget a {
-	color:red;
-	font-size: .85rem;
+.vdabalert_date {
+	color: black;
+	background-color: #b6d0f9;
+	font-size: .9rem;
+}
+.vdabalert_summary {
+	color: black;
+	font-weight: bold;
+	background-color: #b6d0f9;
+	font-size: .8rem;
 }
 

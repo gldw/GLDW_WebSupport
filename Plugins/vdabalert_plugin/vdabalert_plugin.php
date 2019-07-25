@@ -25,11 +25,12 @@ public function displayAlert( $alert, $Date, $AlertDetailURL ){
 	
 $tz = 'America/New_York';
 $timestamp = (int)$alert["EventTimestamp"];
+// This initializes the value to now.
 $date = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
 $date->setTimestamp($timestamp/1000);
 
-echo "<tr><td>".$date->format($Date)."</td><td>"."<a href='".$AlertDetailURL."?Category=".$alert["Category"]."&Severity=".$alert["Severity"]."&Info=".$alert["Info"]."&Summary=".$alert["Summary"]."&FlowURL=".$alert["FlowURL"]."&ContainerURL=".$alert["ContainerURL"]."&EventTime=".$alert["EventTime"]."&Container=".$alert["Container"]."&Latitude=".$alert["Latitude"]."&Longitude=".$alert["Longitude"]."&Detail=".$alert["Detail"]."'>";
-echo $alert["Info"];
+echo "<tr><td class='vdabalert_date' >".$date->format($Date)."</td><td class='vdabalert_summary' >"."<a href='".$AlertDetailURL."?Category=".$alert["Category"]."&Severity=".$alert["Severity"]."&Summary=".$alert["Summary"]."&FlowURL=".$alert["FlowURL"]."&ContainerURL=".$alert["ContainerURL"]."&EventTime=".$alert["EventTime"]."&Container=".$alert["Container"]."&Latitude=".$alert["Latitude"]."&Longitude=".$alert["Longitude"]."&Detail=".$alert["Detail"]."'>";
+echo $alert["Summary"];
 echo "</a></td></tr>";
 }
 public function fixupJSON($result0){
@@ -109,13 +110,14 @@ $result2[strrpos($result2, ',')] = '';
 }
 
 $arr3 = json_decode($result2, true);
-	
+//echo "Version 1.2";
+echo "<div class='vdabalert_tablediv'  >";
 echo "<table>";	
 foreach($arr3 as $alert) { 
 $this->displayAlert($alert, $Date, $AlertDetailURL);
 } 
 echo "</table>";	
-	
+echo "</div>";	
 echo $args['after_widget'];
 }
      
@@ -149,7 +151,7 @@ if ( isset( $instance[ 'NoRows' ] ) ) {
 $NoRows = $instance[ 'NoRows' ];
 }
 else {
-$NoRows = __( '3', 'vdabalert_widget_domain' );
+$NoRows = __( '20', 'vdabalert_widget_domain' );
 }
 	
 if ( isset( $instance[ 'Date' ] ) ) {
