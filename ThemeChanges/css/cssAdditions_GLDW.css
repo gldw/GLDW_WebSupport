@@ -1,6 +1,3 @@
-	
-	
-	
 .site-branding {
   text-align: center;
 	padding-bottom:30px;
@@ -39,8 +36,8 @@
   text-align: left;
 	padding-left: 20px;
 
-  padding-bottom: 10px;
-	padding-top:15px;
+  padding-bottom: 5px;
+	padding-top:5px;
   -webkit-background-size: 100%;
   background-size: 100%;
   background-position: center center;
@@ -57,7 +54,7 @@
  * Page Title
  */
 .page-title {
-	color: white;
+	color: #CCCCFF;
   text-transform: none;
   text-decoration: none;
   text-align: left;
@@ -85,5 +82,199 @@ h4 {
 	color: #010a75;
 }
 h6 {
+	font-size: .9rem;
+	color: red;
+}
+h7 {
+	font-size: .9rem;
 	color: yellow;
+
+}
+	.doc_table  table {
+		width: 100%;	
+		float: Center;
+		border-collapse:collapse;
+		border: 2px solid #2d4985;
+		-moz-hyphens: none;
+		-ms-hyphens: none;
+		-webkit-hyphens: none;
+		hyphens: none;
+	}
+	.doc_table  tr {
+		background-color: white;
+		color: #242465;
+	}
+	.doc_table .doc_title{
+		border: 2px solid #AAAAAA;
+		background-color: #353535;
+		text-align:center; 
+		vertical-align: middle;
+		line-height: 135%;
+		font-size: 1.1rem;
+		color: white; 
+		padding: 1px; 
+		padding-right: 5px; 
+	}
+	.doc_table .doc_subject{
+		border: 2px solid #2d4985;
+		vertical-align: middle;
+		text-align:center; 
+		font-size: 1rem;
+		line-height: 135%;
+		color: #010a75; 
+		padding: 1px; 
+		padding-right: 5px; 
+		padding-left: 8px; 
+	}
+	.doc_table .doc_desc{
+		border: 2px solid #2d4985;
+		font-size: 1.1 rem;
+		line-height: 135%;
+		color: #010a75; 
+		padding: 1px; 
+		padding-right: 5px; 
+		padding-left: 8px; 
+	}
+	.doc_table .doc_video{
+		border: 2px solid #2d4985;
+		font-size: 19px;
+		color: black; 
+		padding: 1px; 
+		padding-right: 2px; 
+		padding-left: 2px; 
+	}
+	.doc_table .doc_links{
+		border: 2px solid #2d4985;
+		vertical-align: top;
+		white-space: nowrap;
+		line-height: 135%;
+		font-size: 15px;
+		color: black; 
+		padding: 1px; 
+		padding-top: 8px;
+		padding-left: 4px; 
+	}
+	.doc_table .doc_linkbutton{
+		background-color: #2d4985;
+		border: none;
+		color: white;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 9 px;
+	}
+	.doc_table td {
+		vertical-align: middle;
+	}
+	.appinfo_table  table {
+		width: 100%;
+		border-collapse:collapse;
+		border: 2px solid #2d4985;
+		-moz-hyphens: none;
+		-ms-hyphens: none;
+		-webkit-hyphens: none;
+		hyphens: none;
+	}
+	.appinfo_table  tr {
+		color: #242465;
+	}
+	.appinfo_table .appinfo_label{
+		background-color: #e1e1ff;
+		border: 2px solid #2d4985;
+		vertical-align: middle;
+		line-height: 135%;
+		font-size: 20px;
+		color: black; 
+		padding: 1px; 
+		padding-left: 8px; 
+		padding-right: 5px; 
+	}
+	.appinfo_table .appinfo_link{
+		border: 2px solid #2d4985;
+		vertical-align: middle;
+ 		font-size: 18px;
+		line-height: 135%;
+		color: #2D4985; 
+		padding: 1px; 
+		padding-right: 5px; 
+		padding-left: 8px; 
+	}
+	.appinfo_table .appinfo_features{
+		border: 2px solid #2d4985;
+		vertical-align: top;
+		line-height: 100%;
+		font-size: 16px;
+		padding: 1px; 
+ 	}
+	
+	.appinfo_table .appinfo_features ul { 
+		margin: 0px; 
+		padding: 0px; 
+		padding-left: 14px; 
+	}
+
+	.appinfo_table .appinfo_features li { 
+		list-style-type:circle;
+		margin:0px 0px 5px 0px;
+		padding:0;
+	}
+.alert_table  tr {
+		background-color: white;
+		color: #242465;
+	}
+.alert_table .alert_header{
+			border: 2px solid #050505;
+				background-color: #2d4985;
+		text-align: center; 
+		vertical-align: middle;
+		line-height: 135%;
+		font-size: 1.2rem;
+		color: white; 
+		padding: 1px; 
+		padding-right: 5px; 
+	}
+.alert_table .alert_item {
+		border: 2px solid #050505;
+		vertical-align: middle;
+		text-align: left; 
+		font-size: 1rem;
+
+		line-height: 135%;
+		color: #050505; 
+		padding: 1px; 
+		padding-right: 5px; 
+		padding-left: 8px; 
+	}
+.alert_summary {
+		background-color: #b6d0f9;
+		vertical-align: middle;
+		text-align: left;
+		font-weight: bold !important;
+		font-size: 1.3rem;
+
+		line-height: 135%;
+		color: #050505; 
+		padding: 1px; 
+		padding-right: 5px; 
+		padding-left: 8px; 
+	}
+ legend,
+ label {
+padding: 0 !important;
+font-weight: bold !important;
+}
+
+ label.choice {
+font-size: 0.9em;
+font-weight: normal;
+}
+
+ input,
+ select,
+ textarea {
+display: block !important;
+border: 1px solid #000 !important;
+font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif !important;
+font-size: 0.9em;
+padding: 0.3em;
 }
