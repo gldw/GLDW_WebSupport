@@ -1,4 +1,4 @@
-<h2><span id="alert_category"></span> Alert</h2>
+h2><span id="alert_category"></span> Alert</h2>
 <div class="alert_summary">
 <span id="alert_summary" "=""> </span></div>
 
@@ -34,10 +34,18 @@ Details</td>
 </tbody>
 </table>
 </div>
-<iframe id="flow_iframe" width="800" height="600" src="http://watershed.gldw.org/vdab"> </iframe>
-
+<div id="googleMap" style="width:100%;height:400px;"></div>
 <span id="alert_href"> </span>
 <pre><script type="text/javascript">
+function myMap() {
+var lat= parseFloat(params.get("Latitude"));
+var lon= parseFloat(params.get("Longitude"));
+var uluru = {lat: lat, lng: lon};
+var map = new google.maps.Map(
+      document.getElementById('googleMap'), {zoom: 11, center: uluru, 
+ mapTypeId: 'hybrid' });
+ var marker = new google.maps.Marker({position: uluru, map: map});
+}
 function formatDetails(details){
   var retstr = "<table>";
   detailRows = details.split("|");
@@ -62,30 +70,19 @@ function formatDetails(details){
    retstr += "</table>";
  return retstr;
 }
+let params = (new URL(document.location)).searchParams;
      var href= window.location.href;
-  document.getElementById("alert_href").innerHTML =decodeURI(href);
-     var sSummary = href.indexOf("&Summary=");
-     var sFlowURL = href.indexOf("&FlowURL=");
-     var sCategory = href.indexOf("?Category=");
-     var sSeverity = href.indexOf("&Severity=");
-     var sDetails = href.indexOf("&Detail=");
-     var sEventTime = href.indexOf("&EventTime=");
-    var sContainer = href.indexOf("&Container=");
-     var sLatitude = href.indexOf("&Latitude=");
-    var sLongitude = href.indexOf("&Longitude=");
-    var sFlowURL = href.indexOf("&FlowURL=");
-    var sContainerURL = href.indexOf("&ContainerURL=");
-    var summary = null;
-        if (sSummary > 0){
-           summary = decodeURI(href.substring(sSummary+9,sFlowURL));
-        }
-        if (summary != null){
-           document.getElementById("alert_summary").innerHTML =summary;
-        }
-   
-      var datetime = null;
-        if (sEventTime > 0){
-           datetime = decodeURI(href.substring(sEventTime+11, sContainer));
+document.getElementById("alert_category").innerHTML=params.get("Category"); 
+document.getElementById("alert_summary").innerHTML=params.get("Summary");
+document.getElementById("alert_date").innerHTML=params.get("EventTime");
+document.getElementById("alert_latitude").innerHTML=params.get("Latitude");
+document.getElementById("alert_longitude").innerHTML=params.get("Longitude");
+document.getElementById("alert_detail").innerHTML=formatDetails(params.get("Detail"));
+</script>
+</pre>
+<pre><script src="https://maps.googleapis.com/maps/api/js?key=
+AIzaSyC9b1kowD19FIbXQRkir9TmhmDvzO20m2Y
+&amp;callback=myMap"></script></pre>));
         }
         if (datetime != null){
            document.getElementById("alert_date").innerHTML =datetime;
