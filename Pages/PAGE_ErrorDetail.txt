@@ -83,48 +83,5 @@ document.getElementById("alert_detail").innerHTML=formatDetails(params.get("Deta
 <pre><script src="https://maps.googleapis.com/maps/api/js?key=
 
 &amp;callback=myMap"></script></pre>));
-        }
-        if (datetime != null){
-           document.getElementById("alert_date").innerHTML =datetime;
-        }
-        var latitude = null;
-        if (sLatitude> 0 ){
-           latitude = decodeURI(href.substring(sLatitude+10, sLongitude));
-        }
-        if (latitude != null){
-           document.getElementById("alert_latitude").innerHTML =latitude;
-        }
-        var longitude = null;
-        if (sLongitude > 0 ){
-           longitude = decodeURI(href.substring(sLongitude+11, sDetails));
-        }
-        if (longitude != null){
-           document.getElementById("alert_longitude").innerHTML =longitude;
-        }
-
-    
-         var category = null;
-        if (sCategory > 0 ){
-          category  = decodeURI(href.substring(sCategory+10, sSeverity));
-       }
-          if (category != null){
-             document.getElementById("alert_category").innerHTML =category;
-          }
-       
-
-      var details = null;
-        if (sDetails > 0){
-           details = decodeURI(href.substring(sDetails+8));
-        }
-        if (details != null){
-           document.getElementById("alert_detail").innerHTML=formatDetails(details);
-        }
-     var flowURL = null;
-        if (sFlowURL > 0 ){
-           flowURL = decodeURI(href.substring(sFlowURL+9, sContainerURL));
-        }
-        if (flowURL != null){
-           document.getElementById("flow_iframe").src =flowURL;
-        }
-
+   
 </script></pre>
