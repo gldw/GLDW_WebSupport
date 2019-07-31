@@ -81,7 +81,7 @@ document.getElementById("alert_detail").innerHTML=formatDetails(params.get("Deta
 </script>
 </pre>
 <pre><script src="https://maps.googleapis.com/maps/api/js?key=
-AIzaSyC9b1kowD19FIbXQRkir9TmhmDvzO20m2Y
+
 &amp;callback=myMap"></script></pre>));
         }
         if (datetime != null){
