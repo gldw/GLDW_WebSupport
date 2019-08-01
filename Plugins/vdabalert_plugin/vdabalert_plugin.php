@@ -14,7 +14,19 @@ array( 'VDAB Alert display widget' => __( 'Widget to display of a list of curren
 );
 }
 	
-
+public function getHrefForDetail( $alert ) {
+var hrefStr = .$AlertDetailURL."?Category=".$alert["Category"]
+."&Severity=".$alert["Severity"]
+."&Summary=".$alert["Summary"]
+."&FlowURL=".$alert["FlowURL"]
+."&ContainerURL=".$alert["ContainerURL"]
+."&EventTime=".$alert["EventTime"]
+."&Container=".$alert["Container"]
+."&Latitude=".$alert["Latitude"]
+."&Longitude=".$alert["Longitude"]
+."&Detail=".$alert["Detail"] ;
+return hrefStr;
+}
 	
 
 public function displayAlert( $alert, $Date, $AlertDetailURL ){
@@ -29,7 +41,7 @@ $timestamp = (int)$alert["EventTimestamp"];
 $date = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
 $date->setTimestamp($timestamp/1000);
 
-echo "<tr><td class='vdabalert_date' >".$date->format($Date)."</td><td class='vdabalert_summary' >"."<a href='".$AlertDetailURL."?Category=".$alert["Category"]."&Severity=".$alert["Severity"]."&Summary=".$alert["Summary"]."&FlowURL=".$alert["FlowURL"]."&ContainerURL=".$alert["ContainerURL"]."&EventTime=".$alert["EventTime"]."&Container=".$alert["Container"]."&Latitude=".$alert["Latitude"]."&Longitude=".$alert["Longitude"]."&Detail=".$alert["Detail"]."'>";
+echo "<tr><td class='vdabalert_date' >".$date->format($Date)."</td><td class='vdabalert_summary' >"."<a href='".getHrefForDetail($alert)."'>";
 echo $alert["Summary"];
 echo "</a></td></tr>";
 }
@@ -49,9 +61,11 @@ $result = preg_replace('/\}+$/', ']', $result,1);
 
 return $result;
 }
-
+// ---------- check for alert duplicates
 public function removeDuplicateAlerts($arr){
-//check for alert duplicates
+
+// MJA NOTE - Indent arrays to make sorting algorithm clear
+// MJA NOTE - Add comment to explaing the algorithm
 $i=0;
 $arr2 = [];
 foreach($arr as $val){
@@ -72,6 +86,7 @@ $arr2[$j]=$arr[$arrkeys[$j]];
 
 return $arr2;
 }
+// ----------------------------------------
 // Creating widget front-end
 // $instance is just an array with settings for an incarnation of a WordPress widget. This array() gets saved to the DB and retrieved again to be able to save the settings for the different widgets. 
 public function widget( $args, $instance ) {
