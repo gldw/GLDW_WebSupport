@@ -25,7 +25,7 @@ var hrefStr = .$AlertDetailURL."?Category=".$alert["Category"]
 ."&Latitude=".$alert["Latitude"]
 ."&Longitude=".$alert["Longitude"]
 ."&Detail=".$alert["Detail"] ;
-return hrefStr;
+ return hrefStr;
 }
 	
 
