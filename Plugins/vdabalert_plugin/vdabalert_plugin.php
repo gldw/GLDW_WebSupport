@@ -4,7 +4,10 @@ Plugin Name: Vdab Alert
 Description: Displays a list of currently active alerts from VDAB
 Author: Matthew App
 */
-
+// MJA - REMOVE ANY DOUBLE SPACE
+// MJA - INDENT FUNCTION CODE IF PEOPLE DO THAT.
+// MJA - ONE SPACE AFTER FUNCTIONS.
+// 
 
 class vdabalert_widget extends WP_Widget {
 function __construct() {
@@ -14,40 +17,32 @@ array( 'VDAB Alert display widget' => __( 'Widget to display of a list of curren
 );
 }
 	
-public function getHrefForDetail( $alert ) {
-var hrefStr = .$AlertDetailURL."?Category=".$alert["Category"]
-."&Severity=".$alert["Severity"]
-."&Summary=".$alert["Summary"]
-."&FlowURL=".$alert["FlowURL"]
-."&ContainerURL=".$alert["ContainerURL"]
-."&EventTime=".$alert["EventTime"]
-."&Container=".$alert["Container"]
-."&Latitude=".$alert["Latitude"]
-."&Longitude=".$alert["Longitude"]
-."&Detail=".$alert["Detail"] ;
- return hrefStr;
+public function getHrefForDetail( $alert, $AlertDetailURL ) {
+	$hrefStr = $AlertDetailURL."?Category=".$alert["Category"];
+	$hrefStr .= "&Severity=".$alert["Severity"];
+	$hrefStr .= "&Summary=".$alert["Summary"];
+	$hrefStr .= "&FlowURL=".$alert["FlowURL"];
+	$hrefStr .= "&ContainerURL=".$alert["ContainerURL"];	
+	$hrefStr .= "&EventTime=".$alert["EventTime"];
+	$hrefStr .= "&Container=".$alert["Container"];
+	$hrefStr .= "&Latitude=".$alert["Latitude"];
+	$hrefStr .= "&Longitude=".$alert["Longitude"];
+	$hrefStr .= "&Detail=".$alert["Detail"];	
+	return $hrefStr;
 }
-	
-
 public function displayAlert( $alert, $Date, $AlertDetailURL ){
-//make the Info attribute of the Alert link to the Alert's ContainerURL
-
-    //$containerURL = $alert["FlowURL"];
-
-	
-$tz = 'America/New_York';
-$timestamp = (int)$alert["EventTimestamp"];
-// This initializes the value to now.
-$date = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
-$date->setTimestamp($timestamp/1000);
-
-echo "<tr><td class='vdabalert_date' >".$date->format($Date)."</td><td class='vdabalert_summary' >"."<a href='".getHrefForDetail($alert)."'>";
-echo $alert["Summary"];
-echo "</a></td></tr>";
+	//make the Info attribute of the Alert link to the Alert's ContainerURL
+	$tz = 'America/New_York';
+	$timestamp = (int)$alert["EventTimestamp"];
+	// This initializes the value to now.
+	$date = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
+	$date->setTimestamp($timestamp/1000);
+	echo "<tr><td class='vdabalert_date' >".$date->format($Date)."</td><td class='vdabalert_summary' >"."<a href='".$this->getHrefForDetail($alert, $AlertDetailURL)."'>";
+	echo $alert["Summary"];
+	echo "</a></td></tr>";
 }
 public function fixupJSON($result0){
-//trimming the json string of unnessecary white spaces and brackets
-//and turning into valid json
+//trimming the json string of unnessecary white spaces and brackets and turning into valid json
 $result = str_replace('\s', '', $result0);
 
 $result = str_replace('"Group":', "", $result);
@@ -64,31 +59,36 @@ return $result;
 // ---------- check for alert duplicates
 public function removeDuplicateAlerts($arr){
 
-// MJA NOTE - Indent arrays to make sorting algorithm clear
-// MJA NOTE - Add comment to explaing the algorithm
+
 $i=0;
 $arr2 = [];
 foreach($arr as $val){
-$c = "";
-foreach($val as $val2){
-$c= $c.strval($val2);
+	$c = "";
+	//array of alerts split into each alert as $val
+	foreach($val as $val2){
+		//concatonate all of alert into one string
+		$c= $c.strval($val2);
+	}
+	//make string array of alerts where each alert is a string
+	$arr2[$i]=$c;
+	$i++;
 }
-$arr2[$i]=$c;
-$i++;
-}
-//get array keys of unique array entries
+//get array keys of unique array entries in string string array
+//because array_unique only works on string arrays among others
 $arrkeys = array_keys(array_unique($arr2));
 $arr2=[];
 for($j=0; $j<sizeof($arrkeys); $j++){
-//extract objects from array that match unique keys
+//extract objects from original, non string array that match unique keys
+//and make $arr2 contain unique entries from original array
 $arr2[$j]=$arr[$arrkeys[$j]];
 }
 
 return $arr2;
 }
-// ----------------------------------------
+// ---- MAIN WIDGET FUNCTION ---
 // Creating widget front-end
-// $instance is just an array with settings for an incarnation of a WordPress widget. This array() gets saved to the DB and retrieved again to be able to save the settings for the different widgets. 
+// $instance is just an array with settings for an incarnation of a WordPress widget. This array() gets saved to the DB and retrieved again to be able to save the settings for the different widgets.
+
 public function widget( $args, $instance ) {
 $title = apply_filters( 'widget_title', $instance['title'] );
 $NoRows = $instance["NoRows"];
@@ -138,43 +138,37 @@ echo $args['after_widget'];
      
 // Widget Backend 
 public function form( $instance ) {
-
-
-if ( isset( $instance[ 'title' ] ) ) {
-$title = $instance[ 'title' ];
+	if ( isset( $instance[ 'title' ] ) ) {
+	$title = $instance[ 'title' ];
 }
 else {
 $title = __( 'VDAB Alerts', 'vdabalert_widget_domain' );
 }
-
 if ( isset( $instance[ 'AlertURL' ] ) ) {
 $AlertURL = $instance[ 'AlertURL' ];
 }
 else {
 $AlertURL = __( 'http://mirror1.gldw.org/vdab/get_Alerts', 'vdabalert_widget_domain' );
 }
-	
-
 if ( isset( $instance[ 'AlertDetailURL' ] ) ) {
 $AlertDetailURL = $instance[ 'AlertDetailURL' ];
 }
 else {
 $AlertDetailURL = __( 'http://gldw.org/alert-detail/', 'vdabalert_widget_domain' );
 }	
-
 if ( isset( $instance[ 'NoRows' ] ) ) {
 $NoRows = $instance[ 'NoRows' ];
 }
 else {
 $NoRows = __( '20', 'vdabalert_widget_domain' );
 }
-	
 if ( isset( $instance[ 'Date' ] ) ) {
 $Date = $instance[ 'Date' ];
 }
 else {
 $Date = __( 'g:i A', 'vdabalert_widget_domain' );
 }
+
 // Widget admin form
 // This html outputs the options of the form in the Widgets screen 
 // In this case, the input html allows one to change the title of the widget.
@@ -202,10 +196,11 @@ $Date = __( 'g:i A', 'vdabalert_widget_domain' );
 
 <?php 
 }
-
+// ---------------------------
      
 // Updating widget replacing old instances with new
 // updates settings user changes through widgets screen, in this case, title
+// MJA - CORRENT INDENTATION
 public function update( $new_instance, $old_instance ) {
 $instance = array();
 $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
@@ -213,7 +208,6 @@ $instance['NoRows'] = ( ! empty( $new_instance['NoRows'] ) ) ? strip_tags( $new_
 $instance['AlertURL'] = ( ! empty( $new_instance['AlertURL'] ) ) ? strip_tags( $new_instance['AlertURL'] ) : '';
 $instance['AlertDetailURL'] = ( ! empty( $new_instance['AlertDetailURL'] ) ) ? strip_tags( $new_instance['AlertDetailURL'] ) : '';
 $instance['Date'] = ( ! empty( $new_instance['Date'] ) ) ? strip_tags( $new_instance['Date'] ) : '';
-	
 return $instance;
 }
 }
@@ -222,13 +216,12 @@ return $instance;
 function vdabalert_load_widget() {
    register_widget( 'vdabalert_widget' );
 }
-// Adds this into the available widgets.
-add_action( 'widgets_init', 'vdabalert_load_widget' );
 
+// Adds this into the available widgets.
 function add_vdabalert_stylesheet() {
 	wp_register_style('vdab_alertwidget', '/wp-content/plugins/vdabalert_plugin/vdab_alertwidget.css');
 wp_enqueue_style('vdab_alertwidget');
 
 }
-
+add_action( 'widgets_init', 'vdabalert_load_widget' );
 add_action( 'wp_print_styles', 'add_vdabalert_stylesheet' );
