@@ -51,32 +51,6 @@ class vdabalert_widget extends WP_Widget {
 		return $result;
 	}
 
-	public function removeDuplicateAlerts($arr){
-		// ---------- check for alert duplicates
-		$i=0;
-		$arr2 = [];
-		foreach($arr as $val){
-		$c = "";
-		//array of alerts split into each alert as $val
-		foreach($val as $val2){
-			//concatonate all of alert into one string
-			$c= $c.strval($val2);
-		}
-		//make string array of alerts where each alert is a string
-		$arr2[$i]=$c;
-		$i++;
-		}
-		//get array keys of unique array entries in string string array
-		//because array_unique only works on string arrays among others
-		$arrkeys = array_keys(array_unique($arr2));
-		$arr2=[];
-		for($j=0; $j<sizeof($arrkeys); $j++){
-			//extract objects from original, non string array that match unique keys
-			//and make $arr2 contain unique entries from original array
-			$arr2[$j]=$arr[$arrkeys[$j]];
-		}
-		return $arr2;
-	}
 	// ---- MAIN WIDGET FUNCTION ---
 	// Creating widget front-end
 	// $instance is just an array with settings for an incarnation of a WordPress widget. This array() gets saved to the DB and retrieved again to be able to save the settings for the different widgets.
@@ -103,8 +77,9 @@ class vdabalert_widget extends WP_Widget {
 		$result = $this->fixupJSON($result0);
 
 		$arr = json_decode($result,true);
-		$arr2 = $this->removeDuplicateAlerts($arr);
-		//reducing array to number of rows requested
+		//  Duplicates are no longer removed
+		$arr2 = $arr;
+
 		if (sizeof($arr2) > $NoRows){
 			array_splice($arr2, $NoRows);
 		}
