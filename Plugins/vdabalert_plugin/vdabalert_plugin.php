@@ -51,6 +51,7 @@ class vdabalert_widget extends WP_Widget {
 		return $result;
 	}
 
+
 	// ---- MAIN WIDGET FUNCTION ---
 	// Creating widget front-end
 	// $instance is just an array with settings for an incarnation of a WordPress widget. This array() gets saved to the DB and retrieved again to be able to save the settings for the different widgets.
@@ -77,9 +78,8 @@ class vdabalert_widget extends WP_Widget {
 		$result = $this->fixupJSON($result0);
 
 		$arr = json_decode($result,true);
-		//  Duplicates are no longer removed
 		$arr2 = $arr;
-
+		//reducing array to number of rows requested
 		if (sizeof($arr2) > $NoRows){
 			array_splice($arr2, $NoRows);
 		}
