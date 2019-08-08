@@ -17,7 +17,7 @@ class vdabalert_widget extends WP_Widget {
 		$hrefStr = $AlertDetailURL."?Category=".$alert["Category"];
 		$hrefStr .= "&Severity=".$alert["Severity"];
 		$hrefStr .= "&Summary=".$alert["Summary"];
-		$hrefStr .= "&FlowURL=".$alert["FlowURL"];
+		$hrefStr .= "&FlowURL=".$alert["InterventionURL"];
 		$hrefStr .= "&ContainerURL=".$alert["ContainerURL"];	
 		$hrefStr .= "&EventTime=".$alert["EventTime"];
 		$hrefStr .= "&Container=".$alert["Container"];
