@@ -14,6 +14,7 @@ class vdabalert_widget extends WP_Widget {
 	}
 		
 	public function getHrefForDetail( $alert, $AlertDetailURL ) {
+		$detail = str_replace("(%)","",$alert["Detail"]);
 		$hrefStr = $AlertDetailURL."?Category=".$alert["Category"];
 		$hrefStr .= "&Severity=".$alert["Severity"];
 		$hrefStr .= "&Summary=".$alert["Summary"];
@@ -23,7 +24,7 @@ class vdabalert_widget extends WP_Widget {
 		$hrefStr .= "&Container=".$alert["Container"];
 		$hrefStr .= "&Latitude=".$alert["Latitude"];
 		$hrefStr .= "&Longitude=".$alert["Longitude"];
-		$hrefStr .= "&Detail=".$alert["Detail"];	
+		$hrefStr .= "&Detail=".$detail;	
 		return $hrefStr;
 	}
 	
