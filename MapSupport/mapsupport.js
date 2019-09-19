@@ -1,7 +1,24 @@
-			 
+// ALL MAPS not supported with IE
+function isBrowserSupported() {
+	if (navigator.userAgent.search("Chrome") >= 0) {
+		return "";
+	}
+	if (navigator.userAgent.search("Safari") >= 0) {
+		return "";
+	}
+	if (navigator.userAgent.search("Firefox") >= 0) {
+		return "";
+	}
+	if (navigator.userAgent.search("Opera") >= 0) {
+		return "";
+	}
+	if (navigator.userAgent.search("Edge") >= 0) {
+		return "";
+	}
+	return "<h3> Internet Explorer is not supported </h3> If the content is not shown properly switch to any other browser";
+}
 
-
-var getJSON = function (url, callback) {
+function getJSON(url, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', url, true);
 	xhr.responseType = 'json';
@@ -18,10 +35,9 @@ var getJSON = function (url, callback) {
 	};
 
 	xhr.send();
-};
-
+}
 // GENERIC ROUTINES
-var buildMap = function (data, buildIcon, buildContent) {
+function buildMap(data, buildIcon, buildContent) {
 	var bounds = new google.maps.LatLngBounds();
 	var lat;
 	var long;
@@ -66,11 +82,10 @@ var buildMap = function (data, buildIcon, buildContent) {
 		//make sure map centers on all buoy markers
 		bounds.extend(marker.position);	
 	}
-	google.maps.event.addListenerOnce(map, 'idle', function() { map.setZoom(map.getZoom()+1);});
+	google.maps.event.addListenerOnce(map, 'idle', function() { map.setZoom(map.getZoom()+0.8);});
 	map.fitBounds(bounds);
 }
 // - ICON ROUTINES - Different icon routines for different maps.
-
 function buildIcon_USGS_Percentile(buoy) {
 	var icon;
 	if (buoy.Percentile > 97) {
@@ -129,7 +144,7 @@ function buildContent_USGS(station) {
 			continue;
 		if (obj2 == "Link") {
 			var url = station[obj2];
-			contentString += "<b> <center> <a href=" + url + " >"
+			contentString += "<br/> <b> <center> <a href=" + url + " >"
 			contentString += "<img src='http://gldw.org/docs/icons/usgs.png' alt='Link to USGS' width='60' height='30' >";
 			contentString += "</a> </center> </b>"
 		}
@@ -161,6 +176,9 @@ function buildContent_NDBC(buoy) {
 			contentString += "<b>" + obj2 + "</b>" + ": " + buoy[obj2] + "<br/>";
 		}
 	}
+	contentString += "<br/> <b> <center> <a href='https://www.ndbc.noaa.gov' >"
+			contentString += "<img src='http://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
+			contentString += "</a> </center> </b>"
 	contentString += "</div>";
 	return contentString;
 }
@@ -170,6 +188,7 @@ function buoyMap() {
 	//retrieve json of buoy data 
 	getJSON('http://ptap.gldw.org/vdab/get_BuoyData', function (err, data) {
 		if (err != null) {
+			alert("FAILED");
 			console.error(err);
 		} else {
 			//get and build the map.
@@ -181,6 +200,7 @@ function greatlakesMap() {
 	//retrieve json of buoy data 
 	getJSON('http://ptap.gldw.org/vdab/get_GreatLakes', function (err, data) {
 		if (err != null) {
+			alert("FAILED");
 			console.error(err);
 		} else {
 			//get and build the map.
