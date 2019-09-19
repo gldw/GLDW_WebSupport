@@ -34,7 +34,6 @@ var buildMap = function (data, buildIcon, buildContent) {
 
 	//initialize map, set center and zoom
 	map = new google.maps.Map(document.getElementById('googleMap'), {
-		zoom: 7,
 		mapTypeId: google.maps.MapTypeId.HYBRID
 	});
 
@@ -65,9 +64,10 @@ var buildMap = function (data, buildIcon, buildContent) {
 		google.maps.event.addListener(marker, 'click', outer(marker, contentString, infowindow));
 
 		//make sure map centers on all buoy markers
-		bounds.extend(marker.position);
-		map.fitBounds(bounds);
+		bounds.extend(marker.position);	
 	}
+	google.maps.event.addListenerOnce(map, 'idle', function() { map.setZoom(map.getZoom()+1);});
+	map.fitBounds(bounds);
 }
 // - ICON ROUTINES - Different icon routines for different maps.
 
