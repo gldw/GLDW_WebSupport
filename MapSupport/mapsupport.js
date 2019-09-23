@@ -37,7 +37,7 @@ function getJSON(url, callback) {
 	xhr.send();
 }
 // GENERIC ROUTINES
-function buildMap(data, buildIcon, buildContent) {
+function buildMap(data, buildIcon, buildContent, maxZoom) {
 	var bounds = new google.maps.LatLngBounds();
 	var lat;
 	var long;
@@ -82,10 +82,65 @@ function buildMap(data, buildIcon, buildContent) {
 		//make sure map centers on all buoy markers
 		bounds.extend(marker.position);	
 	}
-	google.maps.event.addListenerOnce(map, 'idle', function() { map.setZoom(map.getZoom()+0.8);});
+	google.maps.event.addListenerOnce(map, 'idle', function() { 
+		var newZoom = map.getZoom()+0.8;
+		if (newZoom > maxZoom)
+		   newZoom = maxZoom;
+		map.setZoom(newZoom);
+	});
 	map.fitBounds(bounds);
 }
+// SUPPORT ROUTINES - 
+function getHTMLFormattedMetric(label, value) {
+	contentString = "<b>" + label + "</b>" + ": " + value + "<br/>";
+	return contentString;
+}
+function getHTMLFormattedTitle(label) {
+	contentString = "<b> <center>" + label + "</b> </center>";
+	return contentString;
+}
+function getHTMLFormattedAlertingMetric(label, value, shouldAlert) {
+	contentString = "";
+	if (shouldAlert) {
+	
+		contentString += "<b>" + label + ": " 
+		contentString += "<span style='background-color: yellow' > ";
+		contentString += ""+ value + " </b>";
+		contentString += "</span> <br/>";
+	}
+	else {
+		contentString += "<b>" + label + "</b>" + ": " + value + "<br/>";
+	}
+
+	return contentString;
+}
+
 // - ICON ROUTINES - Different icon routines for different maps.
+function buildIcon_default(data) {
+	var icon = {
+		url: 'http://gldw.org/docs/icons/wq_buoy.png',
+		scaledSize: new google.maps.Size(24, 24), // scaled size
+		origin: new google.maps.Point(0, 0), // origin
+		anchor: new google.maps.Point(12, 12) // anchor
+	};
+	return icon;
+}
+function buildContent_default(data) {
+	//for each buoy, have a 'div' with buoy info.
+	contentString = "<div style='overflow:hidden;'>";
+	for (var obj2 in data) {
+		if (obj2 == "EventTimestamp")
+			continue;
+		if (obj2 == "Label")
+			continue;
+		if (obj2 == "Container")
+			continue;		
+		contentString += "<b>" + obj2 + "</b>" + ": " + data[obj2] + "<br/>";
+		}
+
+	contentString += "</div>";
+	return contentString;
+}
 function buildIcon_USGS_Percentile(buoy) {
 	var icon;
 	if (buoy.Percentile > 97) {
@@ -96,17 +151,9 @@ function buildIcon_USGS_Percentile(buoy) {
         	anchor: new google.maps.Point(6,33) // anchor
 		}
 	}
-	else if (buoy.Percentile > 92)  {
+	else if (buoy.Percentile > 90)  {
 		icon = {
 			url: 'http://gldw.org/docs/icons/emblem-important-4.png',
-			scaledSize: new google.maps.Size(20, 20), // scaled size
-			origin: new google.maps.Point(0, 0), // origin
-			anchor: new google.maps.Point(10,10) // anchor
-		}
-	}
-	else if (buoy.Percentile > 85)  {
-		icon = {
-			url: 'http://gldw.org/docs/icons/emblem-important-2.png',
 			scaledSize: new google.maps.Size(20, 20), // scaled size
 			origin: new google.maps.Point(0, 0), // origin
 			anchor: new google.maps.Point(10,10) // anchor
@@ -173,12 +220,64 @@ function buildContent_NDBC(buoy) {
 			contentString += "<center> <b>" + buoy[obj2] + "</b> </center> <br/>";			
 		}
 		else {
-			contentString += "<b>" + obj2 + "</b>" + ": " + buoy[obj2] + "<br/>";
+			switch (obj2){
+				case "GustSpeed":
+					contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 10));
+					break;
+
+				case "WindSpeed":
+					contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 9));
+					break;
+
+				default:
+					contentString += getHTMLFormattedMetric(obj2, buoy[obj2]);
+					break;
+			}
+		
 		}
 	}
 	contentString += "<br/> <b> <center> <a href='https://www.ndbc.noaa.gov' >"
 			contentString += "<img src='http://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
 			contentString += "</a> </center> </b>"
+	contentString += "</div>";
+	return contentString;
+}
+function buildContent_ErieHAB(station) {
+	//for each buoy, have a 'div' with buoy info.
+	contentString = "<div style='overflow:hidden;'>";
+	for (var obj2 in station) {
+		if (obj2 == "EventTimestamp")
+			continue;
+		if (obj2 == "Label")
+			continue;
+		if (obj2 == "Container")
+			continue;
+		else if (obj2 == "Path") {
+			contentString += getHTMLFormattedTitle(station[obj2]);			
+		}
+		else if (obj2 == "EventTime") {
+			contentString += "<center>" + station[obj2] + "</center> <br/>";			
+		}
+		else {
+			switch (obj2){
+				case "BGA (ug/L)":
+					contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 5));
+					break;
+				case "Chlorophyll (ug/L)":
+					contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 10));
+					break;
+				case "BGA/Chlorophyll":
+					contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2],(station[obj2] > 0.5));
+					contentString += "<br/>";
+					break;
+				default:
+					contentString += getHTMLFormattedMetric(obj2, station[obj2]);
+					break;
+			}
+			
+
+		}
+	}
 	contentString += "</div>";
 	return contentString;
 }
@@ -188,11 +287,11 @@ function buoyMap() {
 	//retrieve json of buoy data 
 	getJSON('http://ptap.gldw.org/vdab/get_BuoyData', function (err, data) {
 		if (err != null) {
-			alert("FAILED");
+			alert("FAILED"+err);
 			console.error(err);
 		} else {
 			//get and build the map.
-			buildMap(data, buildIcon_NDBC, buildContent_NDBC);
+			buildMap(data, buildIcon_NDBC, buildContent_NDBC, 8);
 		}
 	});
 }
@@ -200,11 +299,24 @@ function greatlakesMap() {
 	//retrieve json of buoy data 
 	getJSON('http://ptap.gldw.org/vdab/get_GreatLakes', function (err, data) {
 		if (err != null) {
-			alert("FAILED");
+			alert("FAILED "+err);
 			console.error(err);
 		} else {
 			//get and build the map.
-			buildMap(data, buildIcon_USGS_Percentile, buildContent_USGS);
+			buildMap(data, buildIcon_USGS_Percentile, buildContent_USGS, 7);
+
+		}
+	});
+}
+function erieHABMap() {
+	//retrieve json of buoy data 
+	getJSON('http://ptap.gldw.org/vdab/get_ErieHAB', function (err, data) {
+		if (err != null) {
+			alert("FAILED "+err);
+			console.error(err);
+		} else {
+			//get and build the map.
+			buildMap(data, buildIcon_default, buildContent_ErieHAB, 9);
 
 		}
 	});
