@@ -183,25 +183,37 @@ function buildContent_USGS(station) {
 	//for each buoy, have a 'div' with buoy info.
 	contentString = "<div style='overflow:hidden;'>";
 	for (var obj2 in station) {
-		if (obj2 == "EventTimestamp")
-			continue;
-		if (obj2 == "Label")
-			continue;
-		if (obj2 == "Container")
-			continue;
-		if (obj2 == "Link") {
-			var url = station[obj2];
-			contentString += "<br/> <b> <center> <a href=" + url + " >"
-			contentString += "<img src='http://gldw.org/docs/icons/usgs.png' alt='Link to USGS' width='60' height='30' >";
-			contentString += "</a> </center> </b>"
-		}
-		else if (obj2 == "Title") {
-			contentString += "<b> <center>" + station[obj2] + "</b> </center> <br/>";			
-		}
-		else {
-			contentString += "<b>" + obj2 + "</b>" + ": " + station[obj2] + "<br/>";
+		switch (obj2) {
+			case "EventTimestamp":
+			case "Label":
+			case "Container":
+				break;
+
+			case "Link":
+				var url = station[obj2];
+				contentString += "<br/> <b> <center> <a href=" + url + " >"
+				contentString += "<img src='http://gldw.org/docs/icons/usgs.png' alt='Link to USGS' width='60' height='30' >";
+				contentString += "</a> </center> </b>"
+				break;
+
+			case "Title":
+				contentString += getHTMLFormattedTitle(station[obj2]);
+				break;
+
+			case "Sample Time":
+				contentString += "<center>" + station[obj2] + "</center> <br/>";
+				break;
+
+			case "Percentile":
+				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 90));
+				break;
+
+			default:
+				contentString += "<b>" + obj2 + "</b>" + ": " + station[obj2] + "<br/>";
+				break;
 		}
 	}
+
 	contentString += "</div>";
 	return contentString;
 }
@@ -209,36 +221,38 @@ function buildContent_NDBC(buoy) {
 	//for each buoy, have a 'div' with buoy info.
 	contentString = "<div style='overflow:hidden;'>";
 	for (var obj2 in buoy) {
-		if (obj2 == "EventTimestamp")
-			continue;
-		if (obj2 == "Label")
-			continue;
-		if (obj2 == "Container")
-			continue;		
-		
-		if (obj2 == "BuoyInfo") {
-			contentString += "<center> <b>" + buoy[obj2] + "</b> </center> <br/>";			
-		}
-		else {
-			switch (obj2){
-				case "GustSpeed":
-					contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 10));
-					break;
+		switch (obj2) {
+			case "EventTimestamp":
+			case "Label":
+			case "Container":
+				break;
 
-				case "WindSpeed":
-					contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 9));
-					break;
+			case "BuoyInfo":
+				contentString += getHTMLFormattedTitle(buoy[obj2]);
+				break;
 
-				default:
-					contentString += getHTMLFormattedMetric(obj2, buoy[obj2]);
-					break;
-			}
-		
+			case "EventTime":
+				contentString += "<center>" + buoy[obj2] + "</center> <br/>";
+				break;
+
+			case "GustSpeed":
+				contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 10));
+				break;
+
+			case "WindSpeed":
+				contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 9));
+				break;
+
+			default:
+				contentString += getHTMLFormattedMetric(obj2, buoy[obj2]);
+				break;
 		}
+
 	}
+
 	contentString += "<br/> <b> <center> <a href='https://www.ndbc.noaa.gov' >"
-			contentString += "<img src='http://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
-			contentString += "</a> </center> </b>"
+	contentString += "<img src='http://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
+	contentString += "</a> </center> </b>"
 	contentString += "</div>";
 	return contentString;
 }
@@ -246,37 +260,40 @@ function buildContent_ErieHAB(station) {
 	//for each buoy, have a 'div' with buoy info.
 	contentString = "<div style='overflow:hidden;'>";
 	for (var obj2 in station) {
-		if (obj2 == "EventTimestamp")
-			continue;
-		if (obj2 == "Label")
-			continue;
-		if (obj2 == "Container")
-			continue;
-		else if (obj2 == "Path") {
-			contentString += getHTMLFormattedTitle(station[obj2]);			
-		}
-		else if (obj2 == "EventTime") {
-			contentString += "<center>" + station[obj2] + "</center> <br/>";			
-		}
-		else {
-			switch (obj2){
-				case "BGA (ug/L)":
-					contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 5));
-					break;
-				case "Chlorophyll (ug/L)":
-					contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 10));
-					break;
-				case "BGA/Chlorophyll":
-					contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2],(station[obj2] > 0.5));
-					contentString += "<br/>";
-					break;
-				default:
-					contentString += getHTMLFormattedMetric(obj2, station[obj2]);
-					break;
-			}
-			
 
+		switch (obj2) {
+			case "EventTimestamp":
+			case "Label":
+			case "Container":
+				break;
+
+			case "Path":
+				contentString += getHTMLFormattedTitle(station[obj2]);
+				break;
+
+			case "EventTime":
+				contentString += "<center>" + station[obj2] + "</center> <br/>";
+				break;
+
+			case "BGA (ug/L)":
+				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 5));
+				break;
+
+			case "Chlorophyll (ug/L)":
+				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 10));
+				break;
+
+			case "BGA/Chlorophyll":
+				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 0.5));
+				contentString += "<br/>";
+				break;
+
+			default:
+				contentString += getHTMLFormattedMetric(obj2, station[obj2]);
+				break;
 		}
+
+
 	}
 	contentString += "</div>";
 	return contentString;
