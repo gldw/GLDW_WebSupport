@@ -1,4 +1,5 @@
-// ALL MAPS not supported with IE
+               				 
+			// ALL MAPS not supported with IE
 function isBrowserSupported() {
 	if (navigator.userAgent.search("Chrome") >= 0) {
 		return "";
@@ -36,6 +37,10 @@ function getJSON(url, callback) {
 
 	xhr.send();
 }
+
+
+
+
 // GENERIC ROUTINES
 function buildMap(data, buildIcon, buildContent, maxZoom) {
 	var bounds = new google.maps.LatLngBounds();
@@ -46,6 +51,7 @@ function buildMap(data, buildIcon, buildContent, maxZoom) {
 	var contentString;
 	var marker;
 	var outer;
+	
 	var infowindow = new google.maps.InfoWindow();
 
 	//initialize map, set center and zoom
@@ -53,7 +59,8 @@ function buildMap(data, buildIcon, buildContent, maxZoom) {
 		mapTypeId: google.maps.MapTypeId.HYBRID
 	});
 
-	//iterate through all buoys
+	
+	//iterate through all buoys again
 	for (var obj in data.Group) {
 		buoy = data.Group[obj];
 		lat = parseFloat(buoy.Latitude);
@@ -82,6 +89,10 @@ function buildMap(data, buildIcon, buildContent, maxZoom) {
 		//make sure map centers on all buoy markers
 		bounds.extend(marker.position);	
 	}
+	
+	
+	
+	
 	google.maps.event.addListenerOnce(map, 'idle', function() { 
 		var newZoom = map.getZoom()+0.8;
 		if (newZoom > maxZoom)
@@ -103,7 +114,7 @@ function getHTMLFormattedAlertingMetric(label, value, shouldAlert) {
 	contentString = "";
 	if (shouldAlert) {
 	
-		contentString += "<b>" + label + ": " 
+		contentString += "<b>" + label + ": "; 
 		contentString += "<span style='background-color: yellow' > ";
 		contentString += ""+ value + " </b>";
 		contentString += "</span> <br/>";
@@ -141,6 +152,137 @@ function buildContent_default(data) {
 	contentString += "</div>";
 	return contentString;
 }
+
+function buildIcon_OhioUSGS_HUCode(buoy) {
+	var icon;
+	
+	const VERYHIGH = 97.0,
+		  HIGH = 92.0,
+		  MEDIUMHIGH = 90.0,
+		  MEDIUM = 50,
+		  LOW = 0;
+	
+	if (buoy.HUCode.startsWith("04")) {
+		if (buoy.Percentile >= VERYHIGH){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huA_veryhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= HIGH){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huA_highpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUMHIGH){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huA_mediumhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUM){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huA_mediumpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= LOW){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huA_lowpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+	}
+	else if (buoy.HUCode.startsWith("05"))  {
+		if (buoy.Percentile >= VERYHIGH){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huB_veryhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= HIGH){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huB_highpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUMHIGH){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huB_mediumhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUM){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huB_mediumpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= LOW){
+			icon = {
+				url: 'http://gldw.org/docs/icons/huB_lowpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+    			origin: new google.maps.Point(0,0), // origin
+        		anchor: new google.maps.Point(10,10) // anchor
+			}
+		}
+	}
+	else {
+		icon = {
+			url: 'http://gldw.org/docs/icons/circle_grey.png',
+			scaledSize: new google.maps.Size(10, 10), // scaled size
+			origin: new google.maps.Point(0, 0), // origin
+			anchor: new google.maps.Point(5,5) // anchor
+		}
+	}
+return icon;
+}
+
+
+var uniquecodes=[];
+
+
+
+function getCodes(data){
+	var buoy;
+	var codes=[];
+	var code;
+	
+	for (var obj in data.Group){
+		buoy = data.Group[obj];
+		
+		code = buoy.HUCode.substring(0, 2);
+		codes.push(code);
+	}
+	
+	//filter all HUCodes of State to unique values.
+	function onlyUnique(value, index, self) { 
+    	return self.indexOf(value) === index;
+	}
+	uniquecodes = codes.filter( onlyUnique );
+	
+	uniquecodes.map((num) => parseFloat(num));
+	uniquecodes.sort(function(a, b){return a-b});
+}
 function buildIcon_USGS_Percentile(buoy) {
 	var icon;
 	if (buoy.Percentile > 97) {
@@ -168,164 +310,6 @@ function buildIcon_USGS_Percentile(buoy) {
 		}
 	}
 return icon;
-}
-function buildIcon_NDBC(buoy) {
-	var icon = {
-		url: 'http://gldw.org/docs/icons/wq_buoy.png',
-		scaledSize: new google.maps.Size(24, 24), // scaled size
-		origin: new google.maps.Point(0, 0), // origin
-		anchor: new google.maps.Point(12, 12) // anchor
-	};
-	return icon;
-}
-// - CONTENT ROUTINES - Different content routines for different maps.
-function buildContent_USGS(station) {
-	//for each buoy, have a 'div' with buoy info.
-	contentString = "<div style='overflow:hidden;'>";
-	for (var obj2 in station) {
-		switch (obj2) {
-			case "EventTimestamp":
-			case "Label":
-			case "Container":
-				break;
-
-			case "Link":
-				var url = station[obj2];
-				contentString += "<br/> <b> <center> <a href=" + url + " >"
-				contentString += "<img src='http://gldw.org/docs/icons/usgs.png' alt='Link to USGS' width='60' height='30' >";
-				contentString += "</a> </center> </b>"
-				break;
-
-			case "Title":
-				contentString += getHTMLFormattedTitle(station[obj2]);
-				break;
-
-			case "Sample Time":
-				contentString += "<center>" + station[obj2] + "</center> <br/>";
-				break;
-
-			case "Percentile":
-				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 90));
-				break;
-
-			default:
-				contentString += "<b>" + obj2 + "</b>" + ": " + station[obj2] + "<br/>";
-				break;
-		}
-	}
-
-	contentString += "</div>";
-	return contentString;
-}
-function buildContent_NDBC(buoy) {
-	//for each buoy, have a 'div' with buoy info.
-	contentString = "<div style='overflow:hidden;'>";
-	for (var obj2 in buoy) {
-		switch (obj2) {
-			case "EventTimestamp":
-			case "Label":
-			case "Container":
-				break;
-
-			case "BuoyInfo":
-				contentString += getHTMLFormattedTitle(buoy[obj2]);
-				break;
-
-			case "EventTime":
-				contentString += "<center>" + buoy[obj2] + "</center> <br/>";
-				break;
-
-			case "GustSpeed":
-				contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 10));
-				break;
-
-			case "WindSpeed":
-				contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 9));
-				break;
-
-			default:
-				contentString += getHTMLFormattedMetric(obj2, buoy[obj2]);
-				break;
-		}
-
-	}
-
-	contentString += "<br/> <b> <center> <a href='https://www.ndbc.noaa.gov' >"
-	contentString += "<img src='http://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
-	contentString += "</a> </center> </b>"
-	contentString += "</div>";
-	return contentString;
-}
-
-function buildContent_ErieHAB(station) {
-	//for each buoy, have a 'div' with buoy info.
-	contentString = "<div style='overflow:hidden;'>";
-	for (var obj2 in station) {
-
-		switch (obj2) {
-			case "EventTimestamp":
-			case "Label":
-			case "Container":
-				break;
-
-			case "Path":
-				contentString += getHTMLFormattedTitle(station[obj2]);
-				break;
-
-			case "EventTime":
-				contentString += "<center>" + station[obj2] + "</center> <br/>";
-				break;
-
-			case "BGA (ug/L)":
-				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 5));
-				break;
-
-			case "Chlorophyll (ug/L)":
-				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 10));
-				break;
-
-			case "BGA/Chlorophyll":
-				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 0.5));
-				contentString += "<br/>";
-				break;
-
-			default:
-				contentString += getHTMLFormattedMetric(obj2, station[obj2]);
-				break;
-		}
-
-
-	}
-	contentString += "</div>";
-	return contentString;
-}
-// - ENTRY POINTS - Different entry points for different maps.
-
-// ======================================================
-var uniquecodes=[];
-
-function getCodes(data){
-	var buoy;
-	var codes=[];
-	var code;
-
-	var n = 0;
-	for (var obj in data.Group){
-		buoy = data.Group[obj];
-		n++;
-		code = buoy.HUCode.substring(0, 2);
-		codes.push(code);
-	}
-	
-	//filter all HUCodes of State to unique values.
-	function onlyUnique(value, index, self) { 
-    	return self.indexOf(value) === index;
-	}
-	uniquecodes = codes.filter( onlyUnique );
-	
-	uniquecodes.map((num) => parseFloat(num));
-	uniquecodes.sort(function(a, b){return a-b});
-	return n;
 }
 function buildIcon_USGS(buoy) {
 	var icon;
@@ -546,5 +530,185 @@ function buildIcon_USGS(buoy) {
 	
 return icon;
 }
+function buildIcon_NDBC(buoy) {
+	var icon = {
+		url: 'http://gldw.org/docs/icons/wq_buoy.png',
+		scaledSize: new google.maps.Size(24, 24), // scaled size
+		origin: new google.maps.Point(0, 0), // origin
+		anchor: new google.maps.Point(12, 12) // anchor
+	};
+	return icon;
+}
+// - CONTENT ROUTINES - Different content routines for different maps.
+function buildContent_USGS(station) {
+	//for each buoy, have a 'div' with buoy info.
+	contentString = "<div style='overflow:hidden;'>";
+	for (var obj2 in station) {
+		switch (obj2) {
+			case "EventTimestamp":
+			case "Label":
+			case "Container":
+				break;
 
+			case "Link":
+				var url = station[obj2];
+				contentString += "<br/> <b> <center> <a href=" + url + " >";
+				contentString += "<img src='http://gldw.org/docs/icons/usgs.png' alt='Link to USGS' width='60' height='30' >";
+				contentString += "</a> </center> </b>";
+				break;
+
+			case "Title":
+				contentString += getHTMLFormattedTitle(station[obj2]);
+				break;
+
+			case "Sample Time":
+				contentString += "<center>" + station[obj2] + "</center> <br/>";
+				break;
+
+			case "Percentile":
+				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 90));
+				break;
+
+			default:
+				contentString += "<b>" + obj2 + "</b>" + ": " + station[obj2] + "<br/>";
+				break;
+		}
+	}
+
+	contentString += "</div>";
+	return contentString;
+}
+function buildContent_NDBC(buoy) {
+	//for each buoy, have a 'div' with buoy info.
+	contentString = "<div style='overflow:hidden;'>";
+	for (var obj2 in buoy) {
+		switch (obj2) {
+			case "EventTimestamp":
+			case "Label":
+			case "Container":
+				break;
+
+			case "BuoyInfo":
+				contentString += getHTMLFormattedTitle(buoy[obj2]);
+				break;
+
+			case "EventTime":
+				contentString += "<center>" + buoy[obj2] + "</center> <br/>";
+				break;
+
+			case "GustSpeed":
+				contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 10));
+				break;
+
+			case "WindSpeed":
+				contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 9));
+				break;
+
+			default:
+				contentString += getHTMLFormattedMetric(obj2, buoy[obj2]);
+				break;
+		}
+
+	}
+
+	contentString += "<br/> <b> <center> <a href='https://www.ndbc.noaa.gov' >";
+	contentString += "<img src='http://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
+	contentString += "</a> </center> </b>";
+	contentString += "</div>";
+	return contentString;
+}
+function buildContent_ErieHAB(station) {
+	//for each buoy, have a 'div' with buoy info.
+	contentString = "<div style='overflow:hidden;'>";
+	for (var obj2 in station) {
+
+		switch (obj2) {
+			case "EventTimestamp":
+			case "Label":
+			case "Container":
+				break;
+
+			case "Path":
+				contentString += getHTMLFormattedTitle(station[obj2]);
+				break;
+
+			case "EventTime":
+				contentString += "<center>" + station[obj2] + "</center> <br/>";
+				break;
+
+			case "BGA (ug/L)":
+				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 5));
+				break;
+
+			case "Chlorophyll (ug/L)":
+				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 10));
+				break;
+
+			case "BGA/Chlorophyll":
+				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 0.5));
+				contentString += "<br/>";
+				break;
+
+			default:
+				contentString += getHTMLFormattedMetric(obj2, station[obj2]);
+				break;
+		}
+
+
+	}
+	contentString += "</div>";
+	return contentString;
+}
+// - ENTRY POINTS - Different entry points for different maps.
+function ohioUSGSMap() {
+	getJSON('http://mirror1.gldw.org/vdab/get_OhioUSGS', function (err, data) {
+		if (err != null) {
+			alert("FAILED"+err);
+			console.error(err);
+		} else {
+			//get and build the map.
+			buildMap(data, buildIcon_OhioUSGS_HUCode, buildContent_USGS, 7);
+		}
+	});	
+}
+
+
+function buoyMap() {
+	//retrieve json of buoy data 
+	getJSON('http://mirror1.gldw.org/vdab/get_BuoyData', function (err, data) {
+		if (err != null) {
+			alert("FAILED"+err);
+			console.error(err);
+		} else {
+			//get and build the map.
+			buildMap(data, buildIcon_NDBC, buildContent_NDBC, 8);
+		}
+	});
+}
+function greatlakesMap() {
+	//retrieve json of buoy data 
+	getJSON('http://mirror1.gldw.org/vdab/get_GreatLakes', function (err, data) {
+		if (err != null) {
+			alert("FAILED "+err);
+			console.error(err);
+		} else {
+			//get and build the map.
+			buildMap(data, buildIcon_USGS_Percentile, buildContent_USGS, 7);
+
+		}
+	});
+}
+function erieHABMap() {
+	//retrieve json of buoy data 
+	getJSON('http://mirror1.gldw.org/vdab/get_ErieHAB', function (err, data) {
+		if (err != null) {
+			alert("FAILED "+err);
+			console.error(err);
+		} else {
+			//get and build the map.
+			buildMap(data, buildIcon_default, buildContent_ErieHAB, 9);
+
+		}
+	});
+}
 		 
