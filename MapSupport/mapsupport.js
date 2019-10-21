@@ -167,15 +167,26 @@ function buildIcon_USGS_Percentile(buoy) {
 			anchor: new google.maps.Point(5,5) // anchor
 		}
 	}
-return icon;
+	return icon;
 }
 function buildIcon_NDBC(buoy) {
-	var icon = {
-		url: 'http://gldw.org/docs/icons/wq_buoy.png',
-		scaledSize: new google.maps.Size(24, 24), // scaled size
-		origin: new google.maps.Point(0, 0), // origin
-		anchor: new google.maps.Point(12, 12) // anchor
-	};
+	var icon;
+	if (buoy.WaveHeight == null) {
+		var icon = {
+			url: 'http://gldw.org/docs/icons/wq_station.png',
+			scaledSize: new google.maps.Size(27, 27), // scaled size
+			origin: new google.maps.Point(0, 0), // origin
+			anchor: new google.maps.Point(13, 13) // anchor
+		};
+	}
+	else {
+		var icon = {
+			url: 'http://gldw.org/docs/icons/wq_buoy.png',
+			scaledSize: new google.maps.Size(27, 27), // scaled size
+			origin: new google.maps.Point(0, 0), // origin
+			anchor: new google.maps.Point(13, 13) // anchor
+		};
+	}
 	return icon;
 }
 // - CONTENT ROUTINES - Different content routines for different maps.
@@ -183,7 +194,7 @@ function buildContent_USGS(station) {
 	//for each buoy, have a 'div' with buoy info.
 	contentString = "<div style='overflow:hidden;'>";
 	for (var obj2 in station) {
-		switch (obj2) {
+			switch (obj2) {
 			case "EventTimestamp":
 			case "Label":
 			case "Container":
@@ -337,6 +348,22 @@ function buildIcon_USGS(buoy) {
 		  MEDIUM = 50,
 		  LOW = 0;
 
+		 // Get first part of name by checking the HUSub.
+		 var namePart1;
+		 // Get second part of name by checking the percent
+		 var namePart2;
+		 
+		// Assemble the proper icon referenc name.
+		
+		// Define icon
+		/*
+				icon = {
+					url: 'http://gldw.org/docs/icons/'+namePart1+'_'+namePart2+'.png',
+					scaledSize: new google.maps.Size(20, 20), // scaled size
+    				origin: new google.maps.Point(0,0), // origin
+        			anchor: new google.maps.Point(10,10) // anchor
+				}
+		*/
 	code = buoy.HUCode.substring(0, 2);
 	HUSub = parseFloat(code);
 		 
@@ -474,7 +501,7 @@ function buildIcon_USGS(buoy) {
         			anchor: new google.maps.Point(10,10) // anchor
 				}
 			}
-			else if (buoy.Percentile >= LOW){
+			else {
 				icon = {
 					url: 'http://gldw.org/docs/icons/huC_lowpcnt.png',
 					scaledSize: new google.maps.Size(20, 20), // scaled size
@@ -482,13 +509,7 @@ function buildIcon_USGS(buoy) {
         			anchor: new google.maps.Point(10,10) // anchor
 				}
 			}
-			else {
-		icon = {
-			url: 'http://gldw.org/docs/icons/circle_grey.png',
-			scaledSize: new google.maps.Size(20, 20), // scaled size
-			origin: new google.maps.Point(0, 0), // origin
-			anchor: new google.maps.Point(5,5) // anchor
-		}
+	
 	}
 		
 	}
