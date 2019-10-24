@@ -75,19 +75,20 @@ function buildMap(data, buildIcon, buildContent, maxZoom) {
 				infowindow.open(map, marker);
 			};
 		}
-
 		//"outer"'s closure becomes the callback function of the event listener.
 		google.maps.event.addListener(marker, 'click', outer(marker, contentString, infowindow));
 
 		//make sure map centers on all buoy markers
 		bounds.extend(marker.position);	
 	}
+//	Maybe a performance issue
 	google.maps.event.addListenerOnce(map, 'idle', function() { 
-		var newZoom = map.getZoom()+0.8;
+		var newZoom = map.getZoom()+0.5;
 		if (newZoom > maxZoom)
 		   newZoom = maxZoom;
 		map.setZoom(newZoom);
 	});
+
 	map.fitBounds(bounds);
 }
 // SUPPORT ROUTINES - 
@@ -118,7 +119,7 @@ function getHTMLFormattedAlertingMetric(label, value, shouldAlert) {
 // - ICON ROUTINES - Different icon routines for different maps.
 function buildIcon_default(data) {
 	var icon = {
-		url: 'http://gldw.org/docs/icons/wq_buoy.png',
+		url: 'https://gldw.org/docs/icons/wq_buoy.png',
 		scaledSize: new google.maps.Size(24, 24), // scaled size
 		origin: new google.maps.Point(0, 0), // origin
 		anchor: new google.maps.Point(12, 12) // anchor
@@ -145,7 +146,7 @@ function buildIcon_USGS_Percentile(buoy) {
 	var icon;
 	if (buoy.Percentile > 97) {
 		icon = {
-			url: 'http://gldw.org/docs/icons/alert.png',
+			url: 'https://gldw.org/docs/icons/alert.png',
 			scaledSize: new google.maps.Size(33, 33), // scaled size
     		origin: new google.maps.Point(0,0), // origin
         	anchor: new google.maps.Point(6,33) // anchor
@@ -153,7 +154,7 @@ function buildIcon_USGS_Percentile(buoy) {
 	}
 	else if (buoy.Percentile > 90)  {
 		icon = {
-			url: 'http://gldw.org/docs/icons/emblem-important-4.png',
+			url: 'https://gldw.org/docs/icons/emblem-important-4.png',
 			scaledSize: new google.maps.Size(20, 20), // scaled size
 			origin: new google.maps.Point(0, 0), // origin
 			anchor: new google.maps.Point(10,10) // anchor
@@ -161,7 +162,7 @@ function buildIcon_USGS_Percentile(buoy) {
 	}
 	else {
 		icon = {
-			url: 'http://gldw.org/docs/icons/circle_grey.png',
+			url: 'https://gldw.org/docs/icons/circle_grey.png',
 			scaledSize: new google.maps.Size(10, 10), // scaled size
 			origin: new google.maps.Point(0, 0), // origin
 			anchor: new google.maps.Point(5,5) // anchor
@@ -173,7 +174,7 @@ function buildIcon_NDBC(buoy) {
 	var icon;
 	if (buoy.WaveHeight == null) {
 		var icon = {
-			url: 'http://gldw.org/docs/icons/wq_station.png',
+			url: 'https://gldw.org/docs/icons/wq_station.png',
 			scaledSize: new google.maps.Size(27, 27), // scaled size
 			origin: new google.maps.Point(0, 0), // origin
 			anchor: new google.maps.Point(13, 13) // anchor
@@ -181,7 +182,7 @@ function buildIcon_NDBC(buoy) {
 	}
 	else {
 		var icon = {
-			url: 'http://gldw.org/docs/icons/wq_buoy.png',
+			url: 'https://gldw.org/docs/icons/wq_buoy.png',
 			scaledSize: new google.maps.Size(27, 27), // scaled size
 			origin: new google.maps.Point(0, 0), // origin
 			anchor: new google.maps.Point(13, 13) // anchor
@@ -203,7 +204,7 @@ function buildContent_USGS(station) {
 			case "Link":
 				var url = station[obj2];
 				contentString += "<br/> <b> <center> <a href=" + url + " >"
-				contentString += "<img src='http://gldw.org/docs/icons/usgs.png' alt='Link to USGS' width='60' height='30' >";
+				contentString += "<img src='https://gldw.org/docs/icons/usgs.png' alt='Link to USGS' width='60' height='30' >";
 				contentString += "</a> </center> </b>"
 				break;
 
@@ -262,7 +263,7 @@ function buildContent_NDBC(buoy) {
 	}
 
 	contentString += "<br/> <b> <center> <a href='https://www.ndbc.noaa.gov' >"
-	contentString += "<img src='http://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
+	contentString += "<img src='https://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
 	contentString += "</a> </center> </b>"
 	contentString += "</div>";
 	return contentString;
@@ -333,239 +334,198 @@ function getCodes(data){
     	return self.indexOf(value) === index;
 	}
 	uniquecodes = codes.filter( onlyUnique );
-	
-	uniquecodes.map((num) => parseFloat(num));
-	uniquecodes.sort(function(a, b){return a-b});
+//	DEPRECATE - MJA - 23 OCT 19	
+//	uniquecodes.map((num) => parseFloat(num));
+//	uniquecodes.sort(function(a, b){return a-b});
 	return n;
 }
 function buildIcon_USGS(buoy) {
 	var icon;
 	var HUSub;
-	
-	const VERYHIGH = 97.0,
-		  HIGH = 92.0,
-		  MEDIUMHIGH = 90.0,
-		  MEDIUM = 50,
-		  LOW = 0;
 
-		 // Get first part of name by checking the HUSub.
-		 var namePart1;
-		 // Get second part of name by checking the percent
-		 var namePart2;
-		 
-		// Assemble the proper icon referenc name.
-		
-		// Define icon
-		/*
-				icon = {
-					url: 'http://gldw.org/docs/icons/'+namePart1+'_'+namePart2+'.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-		*/
+	const VERYHIGH = 97.0,
+		HIGH = 92.0,
+		MEDIUMHIGH = 90.0,
+		MEDIUM = 50,
+		LOW = 0;
+
+
 	code = buoy.HUCode.substring(0, 2);
 	HUSub = parseFloat(code);
-		 
-   		if (HUSub == uniquecodes[0]){
-			if (buoy.Percentile >= VERYHIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huA_veryhighpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
+
+	if (HUSub == uniquecodes[0]) {
+		if (buoy.Percentile >= VERYHIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huA_veryhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
 			}
-			else if (buoy.Percentile >= HIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huA_highpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= MEDIUMHIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huA_mediumhighpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= MEDIUM){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huA_mediumpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= LOW){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huA_lowpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else {
-		icon = {
-			url: 'http://gldw.org/docs/icons/circle_grey.png',
-			scaledSize: new google.maps.Size(20, 20), // scaled size
-			origin: new google.maps.Point(0, 0), // origin
-			anchor: new google.maps.Point(5,5) // anchor
 		}
-	}
-	}
-	if (HUSub == uniquecodes[1]){
-		if (buoy.Percentile >= VERYHIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huB_veryhighpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
+		else if (buoy.Percentile >= HIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huA_highpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
 			}
-			else if (buoy.Percentile >= HIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huB_highpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= MEDIUMHIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huB_mediumhighpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= MEDIUM){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huB_mediumpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= LOW){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huB_lowpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-		    else {
-		icon = {
-			url: 'http://gldw.org/docs/icons/circle_grey.png',
-			scaledSize: new google.maps.Size(20, 20), // scaled size
-			origin: new google.maps.Point(0, 0), // origin
-			anchor: new google.maps.Point(5,5) // anchor
 		}
-	}
-		
-	}
-	if (HUSub == uniquecodes[2]){
-		if (buoy.Percentile >= VERYHIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huC_veryhighpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
+		else if (buoy.Percentile >= MEDIUMHIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huA_mediumhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
 			}
-			else if (buoy.Percentile >= HIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huC_highpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= MEDIUMHIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huC_mediumhighpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= MEDIUM){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huC_mediumpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else {
-				icon = {
-					url: 'http://gldw.org/docs/icons/huC_lowpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-	
-	}
-		
-	}
-	if (HUSub == uniquecodes[3]){
-		if (buoy.Percentile >= VERYHIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huD_veryhighpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= HIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huD_highpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= MEDIUMHIGH){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huD_mediumhighpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= MEDIUM){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huD_mediumpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else if (buoy.Percentile >= LOW){
-				icon = {
-					url: 'http://gldw.org/docs/icons/huD_lowpcnt.png',
-					scaledSize: new google.maps.Size(20, 20), // scaled size
-    				origin: new google.maps.Point(0,0), // origin
-        			anchor: new google.maps.Point(10,10) // anchor
-				}
-			}
-			else {
-		icon = {
-			url: 'http://gldw.org/docs/icons/circle_grey.png',
-			scaledSize: new google.maps.Size(20, 20), // scaled size
-			origin: new google.maps.Point(0, 0), // origin
-			anchor: new google.maps.Point(5,5) // anchor
 		}
+		else if (buoy.Percentile >= MEDIUM) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huA_mediumpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huA_lowpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+
 	}
-		
+	if (HUSub == uniquecodes[1]) {
+		if (buoy.Percentile >= VERYHIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huB_veryhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= HIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huB_highpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUMHIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huB_mediumhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUM) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huB_mediumpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huB_lowpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+
 	}
-	
+	if (HUSub == uniquecodes[2]) {
+		if (buoy.Percentile >= VERYHIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huC_veryhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= HIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huC_highpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUMHIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huC_mediumhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUM) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huC_mediumpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huC_lowpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+
+	}
+	if (HUSub == uniquecodes[3]) {
+		if (buoy.Percentile >= VERYHIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huD_veryhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= HIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huD_highpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUMHIGH) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huD_mediumhighpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else if (buoy.Percentile >= MEDIUM) {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huD_mediumpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+		else {
+			icon = {
+				url: 'https://gldw.org/docs/icons/huD_lowpcnt.png',
+				scaledSize: new google.maps.Size(20, 20), // scaled size
+				origin: new google.maps.Point(0, 0), // origin
+				anchor: new google.maps.Point(10, 10) // anchor
+			}
+		}
+
+	}
+
 return icon;
 }
 
-		 
