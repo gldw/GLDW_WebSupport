@@ -52,7 +52,5 @@ scaledSize: new google.maps.Size(20, 20), // scaled size
     origin: new google.maps.Point(0,0), // origin
         anchor: new google.maps.Point(10,10) // anchor
 }
-
-
 return icon;
 }
