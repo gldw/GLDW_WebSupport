@@ -45,9 +45,9 @@ else if (buoy.Percentile >= LOW){
 namePart2 = "lowpcnt"; 
 }
 
-
+var name = namePart1+'_'+namePart2;
 icon = {
-url: 'http://gldw.org/docs/icons/'+namePart1+'_'+namePart2+'.png',
+url: '/vdab/_f?dir=web/icons&name='+name+'&type=png',
 scaledSize: new google.maps.Size(20, 20), // scaled size
     origin: new google.maps.Point(0,0), // origin
         anchor: new google.maps.Point(10,10) // anchor
