@@ -1,3 +1,30 @@
+// SUPPORT ROUTINES -
+function getHTMLFormattedAlertingMeasurement(buoy, label, value, shouldAlert) {
+	contentString = "";
+	if (shouldAlert) {
+		contentString += "<span style='background-color: yellow' >  <b>";
+		contentString += getHTMLFormattedMeasurement(buoy, label, value);
+		contentString += "</b> </span>";
+	}
+	else {	
+		contentString += "<b>";
+		contentString += getHTMLFormattedMeasurement(buoy, label, value);
+		contentString += "</b>";	
+	}
+
+	return contentString;
+} 
+function getHTMLFormattedMeasurement(buoy, label, value) {
+	value = value.substring(0,4);
+	var unit = buoy["UNIT_"+label];
+
+	contentString = "<b>" + label + "</b>" + ": " + value ;
+	if (unit != null ){ 
+		contentString += " "+ unit;
+	}
+	contentString += "<br/>";
+	return contentString;
+}
 function buildIcon_NDBC(buoy) {
 	var icon;
 	if (buoy.WaveHeight == null) {
@@ -40,18 +67,23 @@ function buildContent_NDBC(buoy) {
 				break;
 
 			case "GustSpeed":
-				contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 10));
+				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 16));
 				break;
 
 			case "WindSpeed":
-				contentString += getHTMLFormattedAlertingMetric(obj2, buoy[obj2], (buoy[obj2] > 9));
+				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 12));
 				break;
 
 			case "Link":
 				break;
-
-			default:
+				
+			case "Latitude":
+			case "Longitude":
 				contentString += getHTMLFormattedMetric(obj2, buoy[obj2]);
+				break;
+			
+			default:
+				contentString += getHTMLFormattedMeasurement(buoy, obj2, buoy[obj2]);
 				break;
 		}
 
