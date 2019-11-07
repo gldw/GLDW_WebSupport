@@ -22,6 +22,9 @@ function buildContent_NDBC(buoy) {
 	//for each buoy, have a 'div' with buoy info.
 	contentString = "<div style='overflow:hidden;'>";
 	for (var obj2 in buoy) {
+		if (obj2.startsWith("UNIT_")) {
+			continue;
+		}
 		switch (obj2) {
 			case "EventTimestamp":
 			case "Label":
