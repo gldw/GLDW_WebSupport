@@ -103,9 +103,9 @@ function buildIcon_USGS(buoy) {
 		namePart2 = "lowpcnt";
 	}
 
-	var name = namePart1 + '_' + namePart2 + '.png';
+	var name = namePart1 + '_' + namePart2;
 	icon = {
-		url: 'https://gldw.org/docs/icons/'+ name,
+		url: '/vdab/_f?dir=web/icons&name=' + name + '&type=png',
 		scaledSize: new google.maps.Size(20, 20), // scaled size
 		origin: new google.maps.Point(0, 0), // origin
 		anchor: new google.maps.Point(10, 10) // anchor
