@@ -29,7 +29,7 @@ function buildIcon_NDBC(buoy) {
 	var icon;
 	if (buoy.WaveHeight == null) {
 		var icon = {
-			url: '/vdab/_f?dir=web/icons&name=wq_station&type=png'
+			url: '/vdab/_f?dir=web/icons&name=wq_station&type=png',
 			scaledSize: new google.maps.Size(27, 27), // scaled size
 			origin: new google.maps.Point(0, 0), // origin
 			anchor: new google.maps.Point(13, 13) // anchor
@@ -37,7 +37,7 @@ function buildIcon_NDBC(buoy) {
 	}
 	else {
 		var icon = {
-			url: '/vdab/_f?dir=web/icons&name=wq_buoy&type=png'
+			url: '/vdab/_f?dir=web/icons&name=wq_buoy&type=png',
 			scaledSize: new google.maps.Size(27, 27), // scaled size
 			origin: new google.maps.Point(0, 0), // origin
 			anchor: new google.maps.Point(13, 13) // anchor
