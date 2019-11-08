@@ -1,30 +1,3 @@
-// SUPPORT ROUTINES -
-function getHTMLFormattedAlertingMeasurement(buoy, label, value, shouldAlert) {
-	contentString = "";
-	if (shouldAlert) {
-		contentString += "<span style='background-color: yellow' >  <b>";
-		contentString += getHTMLFormattedMeasurement(buoy, label, value);
-		contentString += "</b> </span>";
-	}
-	else {	
-		contentString += "<b>";
-		contentString += getHTMLFormattedMeasurement(buoy, label, value);
-		contentString += "</b>";	
-	}
-
-	return contentString;
-} 
-function getHTMLFormattedMeasurement(buoy, label, value) {
-	value = value.substring(0,4);
-	var unit = buoy["UNIT_"+label];
-
-	contentString = "<b>" + label + "</b>" + ": " + value ;
-	if (unit != null ){ 
-		contentString += " "+ unit;
-	}
-	contentString += "<br/>";
-	return contentString;
-}
 function buildIcon_NDBC(buoy) {
 	var icon;
 	if (buoy.WaveHeight == null) {
@@ -37,7 +10,7 @@ function buildIcon_NDBC(buoy) {
 	}
 	else {
 		var icon = {
-			url: 'https://gldw.org/docs/icons/wq_buoy.png',
+			url:  'https://gldw.org/docs/icons/wq_buoy.png',
 			scaledSize: new google.maps.Size(27, 27), // scaled size
 			origin: new google.maps.Point(0, 0), // origin
 			anchor: new google.maps.Point(13, 13) // anchor
@@ -45,6 +18,7 @@ function buildIcon_NDBC(buoy) {
 	}
 	return icon;
 }
+
 function buildContent_NDBC(buoy) {
 	//for each buoy, have a 'div' with buoy info.
 	contentString = "<div style='overflow:hidden;'>";
@@ -57,13 +31,17 @@ function buildContent_NDBC(buoy) {
 			case "Label":
 			case "Container":
 				break;
-
+				
 			case "BuoyInfo":
 				contentString += getHTMLFormattedTitle(buoy[obj2]);
 				break;
 
+			case "Path":
+				contentString += getHTMLFormattedAttribute(obj2, buoy[obj2]);
+				break;
+	
 			case "EventTime":
-				contentString += "<center>" + buoy[obj2] + "</center> <br/>";
+				contentString += getHTMLFormattedEventTime(buoy[obj2]);
 				break;
 
 			case "GustSpeed":
@@ -79,7 +57,7 @@ function buildContent_NDBC(buoy) {
 				
 			case "Latitude":
 			case "Longitude":
-				contentString += getHTMLFormattedMetric(obj2, buoy[obj2]);
+				contentString += getHTMLFormattedAttribute(obj2, buoy[obj2]);
 				break;
 			
 			default:

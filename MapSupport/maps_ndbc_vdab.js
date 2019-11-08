@@ -1,30 +1,3 @@
-// SUPPORT ROUTINES -
-function getHTMLFormattedAlertingMeasurement(buoy, label, value, shouldAlert) {
-	contentString = "";
-	if (shouldAlert) {
-		contentString += "<span style='background-color: yellow' >  <b>";
-		contentString += getHTMLFormattedMeasurement(buoy, label, value);
-		contentString += "</b> </span>";
-	}
-	else {	
-		contentString += "<b>";
-		contentString += getHTMLFormattedMeasurement(buoy, label, value);
-		contentString += "</b>";	
-	}
-
-	return contentString;
-} 
-function getHTMLFormattedMeasurement(buoy, label, value) {
-	value = value.substring(0,4);
-	var unit = buoy["UNIT_"+label];
-
-	contentString = "<b>" + label + "</b>" + ": " + value ;
-	if (unit != null ){ 
-		contentString += " "+ unit;
-	}
-	contentString += "<br/>";
-	return contentString;
-}
 function buildIcon_NDBC(buoy) {
 	var icon;
 	if (buoy.WaveHeight == null) {
@@ -62,8 +35,12 @@ function buildContent_NDBC(buoy) {
 				contentString += getHTMLFormattedTitle(buoy[obj2]);
 				break;
 
+			case "Path":
+				contentString += getHTMLFormattedAttribute(obj2, buoy[obj2]);
+				break;
+	
 			case "EventTime":
-				contentString += "<center>" + buoy[obj2] + "</center> <br/>";
+				contentString += getHTMLFormattedEventTime(buoy[obj2]);
 				break;
 
 			case "GustSpeed":
@@ -94,7 +71,7 @@ function buildContent_NDBC(buoy) {
 			case "Link":
 				var url = buoy[obj2];
 				contentString += "<br/> <b> <center> <a href=" + url + " >"
-				contentString += "<img src='https://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
+				contentString += "<img src='/vdab/_f?dir=web/icons&name=ndbc&type=png' alt='Link to NDBC' width='75' height='35' >";
 				contentString += "</a> </center> </b>"
 				break;
 
