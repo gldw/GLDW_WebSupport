@@ -45,11 +45,11 @@ function buildContent_NDBC(buoy) {
 				break;
 
 			case "GustSpeed":
-				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 16));
+				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 20));
 				break;
 
 			case "WindSpeed":
-				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 12));
+				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 15));
 				break;
 
 			case "Link":

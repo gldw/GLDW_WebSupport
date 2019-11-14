@@ -139,7 +139,14 @@ function getHTMLFormattedAlertingMeasurement(buoy, label, value, shouldAlert) {
 	return contentString;
 } 
 function getHTMLFormattedMeasurement(buoy, label, value) {
-	value = value.substring(0,4);
+	var dotIndex = value.indexOf(".");
+	var endPos = 4;
+	if (dotIndex > endPos){
+		endPos = dotIndex -1;
+	}
+	if (dotIndex > 0){
+		value = value.substring(0, endPos);
+	}
 	var unit = buoy["UNIT_"+label];
 
 	contentString = "<b>" + label + "</b>" + ": " + value ;
