@@ -73,6 +73,8 @@ class vdabalert_widget extends WP_Widget {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Will return the response, if false it print the response
 		curl_setopt($ch, CURLOPT_URL, $AlertURL); // Set the url
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3); 
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5); //timeout in seconds
 		$result0 = curl_exec($ch); // Execute
 		curl_close($ch); // Closing
 
