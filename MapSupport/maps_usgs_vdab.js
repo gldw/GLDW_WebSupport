@@ -23,6 +23,9 @@ function buildContent_USGS(station) {
 	//for each buoy, have a 'div' with buoy info.
 	contentString = "<div style='overflow:hidden;'>";
 	for (var obj2 in station) {
+	if (obj2.startsWith("UNIT_")) {
+			continue;
+		}
 			switch (obj2) {
 			case "EventTimestamp":
 			case "Label":
@@ -45,7 +48,12 @@ function buildContent_USGS(station) {
 				break;
 
 			case "Percentile":
-				contentString += getHTMLFormattedAlertingMetric(obj2, station[obj2], (station[obj2] > 90));
+				contentString += getHTMLFormattedAlertingMeasurement(station, obj2, station[obj2], (station[obj2] > 90));
+				break;
+			
+			case "Flow":
+			case "Stage":
+				contentString += getHTMLFormattedMeasurement(station, obj2, station[obj2]);
 				break;
 
 			default:
@@ -102,6 +110,7 @@ function buildIcon_USGS(buoy) {
 	else if (buoy.Percentile >= LOW) {
 		namePart2 = "lowpcnt";
 	}
+
 
 	var name = namePart1 + '_' + namePart2;
 	icon = {

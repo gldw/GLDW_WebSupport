@@ -18,6 +18,7 @@ function buildIcon_NDBC(buoy) {
 	}
 	return icon;
 }
+
 function buildContent_NDBC(buoy) {
 	//for each buoy, have a 'div' with buoy info.
 	contentString = "<div style='overflow:hidden;'>";
@@ -30,7 +31,7 @@ function buildContent_NDBC(buoy) {
 			case "Label":
 			case "Container":
 				break;
-
+				
 			case "BuoyInfo":
 				contentString += getHTMLFormattedTitle(buoy[obj2]);
 				break;
@@ -44,11 +45,11 @@ function buildContent_NDBC(buoy) {
 				break;
 
 			case "GustSpeed":
-				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 16));
+				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 20));
 				break;
 
 			case "WindSpeed":
-				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 12));
+				contentString += getHTMLFormattedAlertingMeasurement(buoy, obj2, buoy[obj2], (buoy[obj2] > 15));
 				break;
 
 			case "Link":
@@ -56,7 +57,7 @@ function buildContent_NDBC(buoy) {
 				
 			case "Latitude":
 			case "Longitude":
-				contentString += getHTMLFormattedMetric(obj2, buoy[obj2]);
+				contentString += getHTMLFormattedAttribute(obj2, buoy[obj2]);
 				break;
 			
 			default:
@@ -71,7 +72,7 @@ function buildContent_NDBC(buoy) {
 			case "Link":
 				var url = buoy[obj2];
 				contentString += "<br/> <b> <center> <a href=" + url + " >"
-				contentString += "<img src='/vdab/_f?dir=web/icons&name=ndbc&type=png' alt='Link to NDBC' width='75' height='35' >";
+				contentString += "<img src='https://gldw.org/docs/icons/ndbc.png' alt='Link to NDBC' width='75' height='35' >";
 				contentString += "</a> </center> </b>"
 				break;
 
