@@ -19,7 +19,7 @@
     <?php awesomepress_footer_top(); ?>
 
         <div class="site-info">	           <a href="<?php echo esc_url(__('https://vdabtec.com/', 'dlgw')); ?>">
-                <?php printf( esc_html__('This website and Great Lakes Data Watershed are powered by %s', 'dlgw'), 'VDAB<sup>tm</sup'); ?>
+                <?php printf( esc_html__('This demonstration website and Great Lakes Data Watershed are powered by %s', 'dlgw'), 'VDAB<sup>tm</sup'); ?>
             </a>
          </div><!-- .site-info -->
 
