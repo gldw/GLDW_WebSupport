@@ -30,6 +30,8 @@ function buildContent_NDBC(buoy) {
 			case "EventTimestamp":
 			case "Label":
 			case "Container":
+			case "EventHash":
+			case "DataHash":
 				break;
 				
 			case "BuoyInfo":
